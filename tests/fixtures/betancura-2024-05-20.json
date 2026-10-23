@@ -1,0 +1,19 @@
+{
+  "_source": "Смета по штукатурке Бетанкура, вариант 20.05.2024. Итоги — значения ячеек G39/H39, G65/H65, G66/H66, G67 исходного xlsx.",
+  "vat_rate": 0.20,
+  "sections": [
+    {"name": "Отделка помещений ниже отм. 0,000", "lines": [
+      {"work_type": "plaster_cement_brick_ceramic", "qty": 553.2},
+      {"work_type": "plaster_cement_monolith", "qty": 1687.5}
+    ], "extras": [{"code": "waste_container", "qty": 2}],
+     "expect": {"work": 948131.20, "materials": 1009052.40}},
+    {"name": "Отделка помещений выше отм. 0,000", "lines": [
+      {"work_type": "plaster_gypsum_brick", "qty": 26269.4},
+      {"work_type": "plaster_gypsum_monolith", "qty": 8465.44},
+      {"work_type": "plaster_cement_brick_silicate", "qty": 5087.66},
+      {"work_type": "plaster_cement_monolith", "qty": 865.66}
+    ], "extras": [{"code": "waste_container", "qty": 42}],
+     "expect": {"work": 18616933.32, "materials": 12146122.19}}
+  ],
+  "expect": {"work": 19565064.52, "materials": 13155174.59, "total": 32720239.11, "vat": 5453373.19, "area": 42928.86}
+}

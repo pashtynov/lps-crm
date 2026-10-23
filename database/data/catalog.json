@@ -1,0 +1,370 @@
+{
+  "_source": "Нормы и цены — смета по штукатурке Бетанкура, вариант 20.05.2024 (цены с НДС). Стяжка и шпатлёвка — нормы из файла формул клиента 09.01.2024, цен в исходниках нет. Разбор — clients/lps/docs/crm-formuly.md в репозитории adheads.",
+  "materials": [
+    {
+      "code": "primer_g200",
+      "name": "грунтовка ЕК G200",
+      "unit": "л",
+      "price": 61.5
+    },
+    {
+      "code": "betonokontakt",
+      "name": "грунтовка ЕК Бетоноконтакт",
+      "unit": "кг",
+      "price": 92.86
+    },
+    {
+      "code": "plaster_gypsum",
+      "name": "смесь сухая штукатурная на гипсовом вяжущем ЕК ТG 200",
+      "unit": "кг",
+      "price": 12
+    },
+    {
+      "code": "plaster_cement",
+      "name": "смесь сухая штукатурная на цементном вяжущем ЕК ТТ 100",
+      "unit": "кг",
+      "price": 12,
+      "pack": {
+        "name": "мешок",
+        "size": 25
+      }
+    },
+    {
+      "code": "glue_ek3000",
+      "name": "смесь сухая клеевая ЕК 3000 (слой 5 мм)",
+      "unit": "кг",
+      "price": 12,
+      "pack": {
+        "name": "мешок",
+        "size": 25
+      }
+    },
+    {
+      "code": "beacon",
+      "name": "маяк штукатурный",
+      "unit": "шт.",
+      "price": 30
+    },
+    {
+      "code": "mesh_5x5",
+      "name": "сетка стеклотканевая 5х5",
+      "unit": "м2",
+      "price": 42.08,
+      "pack": {
+        "name": "рулон",
+        "size": 50
+      }
+    },
+    {
+      "code": "sand",
+      "name": "песок речной",
+      "unit": "кг",
+      "price": null
+    },
+    {
+      "code": "cement",
+      "name": "портландцемент",
+      "unit": "кг",
+      "price": null
+    },
+    {
+      "code": "fiber",
+      "name": "фибра полипропиленовая",
+      "unit": "кг",
+      "price": null
+    },
+    {
+      "code": "pe_film",
+      "name": "плёнка ПЭ / Изофлекс 10 мм (подложка под стяжку)",
+      "unit": "м2",
+      "price": null
+    },
+    {
+      "code": "damper_tape",
+      "name": "демпферная лента",
+      "unit": "м.п.",
+      "price": null
+    },
+    {
+      "code": "primer_deep",
+      "name": "грунтовка пропитывающая",
+      "unit": "л",
+      "price": null
+    },
+    {
+      "code": "putty_gypsum",
+      "name": "смесь сухая шпатлёвочная на гипсовом вяжущем",
+      "unit": "кг",
+      "price": null
+    }
+  ],
+  "work_types": [
+    {
+      "code": "plaster_cement_brick_ceramic",
+      "surface": "walls",
+      "group": "Оштукатуривание стен смесью на цементном вяжущем",
+      "name": "Улучшенная цементно-песчаная штукатурка стен из керамического кирпича по маякам с предварительной грунтовкой и установкой стеклотканевой сетки",
+      "unit": "м2",
+      "basis": "walls",
+      "price": 416,
+      "materials": [
+        {
+          "material": "primer_g200",
+          "label": "грунтовка ЕК G200 (в 2 слоя)",
+          "formula": "area",
+          "norm": 0.3,
+          "step": 1
+        },
+        {
+          "material": "plaster_cement",
+          "formula": "area",
+          "norm": 30,
+          "step": 1
+        },
+        {
+          "material": "beacon",
+          "formula": "area",
+          "norm": 0.5,
+          "step": 1
+        },
+        {
+          "material": "mesh_5x5",
+          "formula": "area",
+          "norm": 0.12,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "code": "plaster_cement_brick_silicate",
+      "surface": "walls",
+      "group": "Оштукатуривание стен смесью на цементном вяжущем",
+      "name": "Улучшенная цементно-песчаная штукатурка стен и перегородок из силикатного кирпича и ГСБ по маякам с предварительной грунтовкой и установкой стеклотканевой сетки",
+      "unit": "м2",
+      "basis": "walls",
+      "price": 416,
+      "materials": [
+        {
+          "material": "primer_g200",
+          "label": "грунтовка ЕК G200 (в 2 слоя)",
+          "formula": "area",
+          "norm": 0.3,
+          "step": 1
+        },
+        {
+          "material": "plaster_cement",
+          "formula": "area",
+          "norm": 30,
+          "step": 1
+        },
+        {
+          "material": "beacon",
+          "formula": "area",
+          "norm": 0.5,
+          "step": 1
+        },
+        {
+          "material": "mesh_5x5",
+          "formula": "area",
+          "norm": 0.12,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "code": "plaster_cement_monolith",
+      "surface": "walls",
+      "group": "Оштукатуривание стен смесью на цементном вяжущем",
+      "name": "Улучшенная цементно-песчаная штукатурка (с дополнительным адгезионным слоем) монолитных стен и колонн по маякам с предварительной грунтовкой и установкой стеклотканевой сетки",
+      "unit": "м2",
+      "basis": "walls",
+      "price": 416,
+      "materials": [
+        {
+          "material": "primer_g200",
+          "label": "грунтовка ЕК G200 (в 1 слой)",
+          "formula": "area",
+          "norm": 0.15,
+          "step": 0.1
+        },
+        {
+          "material": "plaster_cement",
+          "formula": "area",
+          "norm": 30,
+          "step": 1
+        },
+        {
+          "material": "glue_ek3000",
+          "formula": "area",
+          "norm": 6.5,
+          "step": 1
+        },
+        {
+          "material": "beacon",
+          "formula": "area",
+          "norm": 0.5,
+          "step": 1
+        },
+        {
+          "material": "mesh_5x5",
+          "formula": "area",
+          "norm": 0.12,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "code": "plaster_gypsum_brick",
+      "surface": "walls",
+      "group": "Оштукатуривание стен смесью на гипсовом вяжущем",
+      "name": "Улучшенная гипсовая штукатурка стен и перегородок из силикатного кирпича и ГСБ по маякам с предварительной грунтовкой и установкой стеклотканевой сетки (*с глянцеванием в жилых комнатах квартир под оклейку обоев)",
+      "unit": "м2",
+      "basis": "walls",
+      "price": 455,
+      "materials": [
+        {
+          "material": "primer_g200",
+          "label": "грунтовка ЕК G200 (в 2 слоя)",
+          "formula": "area",
+          "norm": 0.3,
+          "step": 1
+        },
+        {
+          "material": "plaster_gypsum",
+          "formula": "area",
+          "norm": 20,
+          "step": 1
+        },
+        {
+          "material": "beacon",
+          "formula": "area",
+          "norm": 0.5,
+          "step": 1
+        },
+        {
+          "material": "mesh_5x5",
+          "formula": "area",
+          "norm": 0.12,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "code": "plaster_gypsum_monolith",
+      "surface": "walls",
+      "group": "Оштукатуривание стен смесью на гипсовом вяжущем",
+      "name": "Улучшенная гипсовая штукатурка монолитных стен и колонн по маякам с предварительной грунтовкой и установкой стеклотканевой сетки (*с глянцеванием в жилых комнатах квартир под оклейку обоев)",
+      "unit": "м2",
+      "basis": "walls",
+      "price": 455,
+      "materials": [
+        {
+          "material": "betonokontakt",
+          "label": "грунтовка ЕК Бетоноконтакт (в 1 слой)",
+          "formula": "area",
+          "norm": 0.25,
+          "step": 1
+        },
+        {
+          "material": "plaster_gypsum",
+          "formula": "area",
+          "norm": 20,
+          "step": 1
+        },
+        {
+          "material": "beacon",
+          "formula": "area",
+          "norm": 0.5,
+          "step": 1
+        },
+        {
+          "material": "mesh_5x5",
+          "formula": "area",
+          "norm": 0.12,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "code": "screed_semidry",
+      "surface": "floor",
+      "group": "Полусухая стяжка пола",
+      "name": "Устройство полусухой цементно-песчаной стяжки пола",
+      "unit": "м2",
+      "basis": "floor_threshold",
+      "price": null,
+      "params": {
+        "thickness": 60
+      },
+      "materials": [
+        {
+          "material": "sand",
+          "formula": "area_thickness",
+          "norm": 2.1,
+          "step": 1
+        },
+        {
+          "material": "cement",
+          "formula": "area_thickness",
+          "norm": 0.3,
+          "step": 1
+        },
+        {
+          "material": "fiber",
+          "formula": "volume",
+          "norm": 0.8,
+          "step": 0.1
+        },
+        {
+          "material": "pe_film",
+          "formula": "area",
+          "norm": 1.05,
+          "step": 1
+        },
+        {
+          "material": "damper_tape",
+          "formula": "length",
+          "basis": "perimeter_net",
+          "norm": 1,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "code": "putty_gypsum_walls",
+      "surface": "walls",
+      "group": "Шпатлевание стен",
+      "name": "Шпатлевание стен смесью на гипсовом вяжущем с предварительным грунтованием",
+      "unit": "м2",
+      "basis": "walls",
+      "price": null,
+      "params": {
+        "layers": 1,
+        "thickness": 1
+      },
+      "materials": [
+        {
+          "material": "primer_deep",
+          "formula": "area_layers",
+          "norm": 0.15,
+          "step": 0.1
+        },
+        {
+          "material": "putty_gypsum",
+          "formula": "area_layers_thickness",
+          "norm": 1,
+          "step": 1
+        }
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "code": "waste_container",
+      "name": "Вывоз мусора (1 контейнер 8 м3)",
+      "unit": "шт.",
+      "price": 8000,
+      "rule": "1 контейнер на этаж одной секции"
+    }
+  ]
+}

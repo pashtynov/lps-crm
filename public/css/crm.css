@@ -1,0 +1,40 @@
+/* Дополнения к вёрстке MegaFron для экранов, которых в ней не было: замер, смета, справочник */
+.crm-card { background: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(42, 49, 55, .08); }
+.crm-card h3 { font-size: 18px; margin-bottom: 14px; }
+.crm-card h4 { font-size: 15px; margin: 16px 0 8px; }
+.crm-label { display: block; font-size: 13px; color: #8b9298; margin-bottom: 4px; }
+.crm-error { color: #e94410; font-size: 13px; margin-top: 4px; }
+.crm-flash { background: #e8f7ef; color: #146c43; padding: 10px 16px; margin: 12px 16px 0; border-radius: 8px; }
+.crm-warning { background: #fff6e5; color: #8a5a00; padding: 8px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 14px; }
+.crm-note { color: #8a5a00; font-size: 12px; margin-left: 8px; }
+.crm-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.crm-tab { border: 1px solid #d5dade; border-radius: 8px; padding: 6px 14px; cursor: pointer; font-size: 14px; }
+.crm-tab.active { background: #2a3137; border-color: #2a3137; color: #fff; }
+.crm-scheme { width: 100%; max-width: 260px; } .crm-scheme text { font-size: 14px; font-weight: 600; fill: #467cf4; }
+.crm-table { width: 100%; margin-bottom: 10px; font-size: 14px; }
+.crm-table th { color: #8b9298; font-weight: 400; font-size: 13px; padding: 4px 6px; }
+.crm-table td { padding: 4px 6px; border-top: 1px solid #eef1f4; }
+.crm-table .form-control-sm, .crm-table .form-select-sm { min-width: 70px; }
+.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.crm-work { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 6px 0; border-top: 1px solid #eef1f4; font-size: 14px; }
+.crm-work.on { font-weight: 500; }
+.crm-param { display: inline-flex; align-items: center; gap: 6px; color: #8b9298; font-size: 13px; }
+.crm-param input { width: 70px; }
+.crm-kv { display: flex; justify-content: space-between; gap: 12px; margin: 0; padding: 6px 0; border-top: 1px solid #eef1f4; }
+.crm-kv span { color: #8b9298; }
+.crm-sticky { position: sticky; top: 16px; }
+.crm-total { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.crm-total > div { background: #fff; border-radius: 12px; padding: 14px 18px; flex: 1 1 180px; box-shadow: 0 1px 3px rgba(42, 49, 55, .08); }
+.crm-total span { display: block; color: #8b9298; font-size: 13px; } .crm-total b { font-size: 20px; }
+.crm-total > div:first-child { background: #2a3137; color: #fff; } .crm-total > div:first-child span { color: #c9ced2; }
+.crm-inline { width: 64px; border: 1px solid #d5dade; border-radius: 6px; padding: 1px 6px; font-size: 13px; }
+.crm-estimate td { font-size: 13px; }
+.crm-estimate .crm-mat-row td { color: #5d656b; padding-top: 2px; padding-bottom: 2px; }
+.crm-estimate .crm-mat-row td:nth-child(2) { padding-left: 24px; }
+.crm-section-row td { background: #f4f6f8; font-weight: 600; }
+.crm-subtotal td { font-weight: 600; border-bottom: 2px solid #d5dade; }
+.crm-waste { float: right; font-weight: 400; color: #8b9298; font-size: 13px; }
+.crm-list { padding-left: 18px; } .crm-list li { margin-bottom: 6px; }
+.crm-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f4f6f8; }
+.crm-login__card { width: 360px; max-width: calc(100% - 32px); }
+@media (max-width: 767px) { .crm-waste { float: none; display: block; } .crm-card { padding: 16px; } }
