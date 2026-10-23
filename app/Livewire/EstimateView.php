@@ -6,6 +6,7 @@ use App\Calc\Catalog;
 use App\Calc\ObjectEstimate;
 use App\Models\CrmObject;
 use App\Models\Estimate;
+use App\Support\ObjectSummary;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -96,6 +97,8 @@ class EstimateView extends Component
 
         return view('livewire.estimate-view', [
             'result' => $result,
+            'object' => $object,
+            'sum' => ObjectSummary::for($object, $result),
             'workTypes' => Catalog::workTypes(),
             'lines' => $object->lines()->get(),
             'sections' => $sections->isEmpty() ? collect(['Основной раздел']) : $sections,

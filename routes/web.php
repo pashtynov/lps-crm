@@ -16,6 +16,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [ObjectController::class, 'index'])->name('objects.index');
     Route::post('/objects', [ObjectController::class, 'store'])->name('objects.store');
     Route::get('/objects/{object}', [ObjectController::class, 'show'])->name('objects.show');
+    Route::get('/objects/{object}/edit', [ObjectController::class, 'edit'])->name('objects.edit');
+    Route::put('/objects/{object}', [ObjectController::class, 'update'])->name('objects.update');
+    Route::delete('/objects/{object}', [ObjectController::class, 'destroy'])->name('objects.destroy');
     Route::post('/objects/{object}/rooms/{room}/copy', [ObjectController::class, 'copyRoom'])->name('rooms.copy');
     Route::delete('/objects/{object}/rooms/{room}', [ObjectController::class, 'deleteRoom'])->name('rooms.delete');
 

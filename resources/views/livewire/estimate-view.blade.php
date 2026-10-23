@@ -1,26 +1,37 @@
-@php($fmt = fn ($v, $d = 2) => $v === null ? '—' : number_format((float) $v, $d, ',', ' '))
+@php
+    $fmt = fn ($v, $d = 2) => $v === null ? '—' : number_format((float) $v, $d, ',', ' ');
+@endphp
 <div>
-    @include('partials.page-head', [
-        'heading' => 'Смета',
-        'crumbs' => [$object->name => route('objects.show', $object), 'Смета' => route('estimate', $object)],
-        'actions' => '<a class="btn btn-light" href="' . route('estimate.xlsx', $object) . '">Excel</a> <a class="btn btn-light" target="_blank" href="' . route('estimate.pdf', $object) . '">PDF</a>',
-    ])
+    @include('objects._hero', ['sum' => $sum])
 
-    <div class="section">
+    <div class="sMainInfo section" id="sMainInfo">
         <div class="container-fluid">
-            <div class="crm-total">
-                <div><span>Сметная стоимость с НДС</span><b>{{ $fmt($result['total']) }} ₽</b></div>
-                <div><span>Строительные работы</span><b>{{ $fmt($result['work']) }} ₽</b></div>
-                <div><span>Материалы</span><b>{{ $fmt($result['materials']) }} ₽</b></div>
-                <div><span>в т.ч. НДС
-                        <input class="crm-inline" inputmode="decimal" wire:model.live.debounce.600ms="vatPercent"> %</span>
-                    <b>{{ $fmt($result['vat']) }} ₽</b></div>
-                <div><span>Площадь работ</span><b>{{ $fmt($result['area']) }} м²</b></div>
+            @include('objects._tabs', ['active' => 'estimate'])
+
+            <div class="crm-panel">
+            <div class="crm-estimate-bar">
+                <div><span class="crm-label">Сметная стоимость с НДС</span><b class="crm-big">{{ $fmt($result['total']) }} ₽</b></div>
+                <div><span class="crm-label">в т.ч. НДС, %</span>
+                    <input class="form-control form-control-sm crm-vat" inputmode="decimal" wire:model.live.debounce.600ms="vatPercent">
+                    <span class="crm-muted">{{ $fmt($result['vat']) }} ₽</span></div>
+                <div class="crm-estimate-bar__actions">
+                    <a class="btn btn-light" href="{{ route('estimate.xlsx', $object) }}"><svg class="icon icon-file"><use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#file"></use></svg> Excel</a>
+                    <a class="btn btn-light" target="_blank" href="{{ route('estimate.pdf', $object) }}"><svg class="icon icon-file"><use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#file"></use></svg> PDF</a>
+                </div>
             </div>
 
-            @foreach ($result['warnings'] as $w)
-                <div class="crm-warning">{{ $w }}</div>
-            @endforeach
+            @php
+                $missing = collect($result['warnings'])->groupBy(fn ($w) => \Illuminate\Support\Str::before($w, ':'))
+                    ->map(fn ($g) => $g->map(fn ($w) => trim(\Illuminate\Support\Str::after($w, ':'))));
+            @endphp
+            @if ($missing->isNotEmpty())
+                <div class="crm-warning">
+                    @foreach ($missing as $kind => $items)
+                        <div><b>{{ $kind }}:</b> {{ $items->implode('; ') }}</div>
+                    @endforeach
+                    <div class="small mt-1">Такие позиции в смете считаются по нулю — добавим цены в справочник по вашим данным.</div>
+                </div>
+            @endif
 
             <div class="main-table crm-estimate">
                 <table>
@@ -60,6 +71,7 @@
                     @endforeach
                     </tbody>
                 </table>
+            </div>
             </div>
 
             <div class="row g-4 mt-1">

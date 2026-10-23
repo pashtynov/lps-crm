@@ -28,7 +28,9 @@ it('открывает объект, форму помещения и справ
     $this->actingAs(User::factory()->create());
 
     $this->get("/objects/{$object->id}")->assertOk()->assertSee($room->name);
-    $this->get("/objects/{$object->id}/rooms/{$room->id}")->assertOk()->assertSee('Площади');
+    $this->get("/objects/{$object->id}/rooms/{$room->id}")->assertOk()->assertSee('Площадь стен')->assertSee('Замер');
     $this->get("/objects/{$object->id}/rooms/new")->assertOk();
     $this->get('/catalog')->assertOk()->assertSee('Бетоноконтакт');
+    $this->get("/objects/{$object->id}/edit")->assertOk()->assertSee('Редактирование объекта');
+    $this->get("/objects/{$object->id}/estimate")->assertOk()->assertSee('Доля в смете');
 });

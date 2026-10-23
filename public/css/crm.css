@@ -51,3 +51,53 @@
 .page-head h1 { justify-content: flex-start; flex-wrap: wrap; gap: 4px 12px; }
 .details-with-toggle__item span { display: block !important; color: #8b9298; font-size: 13px; }
 .sObject-card .h4 { overflow-wrap: anywhere; hyphens: auto; }
+
+/* Шапка объекта (sPageInfo) и вкладки */
+.crm-status { display: inline-flex; align-items: center; gap: 6px; background: var(--c); color: #fff; border-radius: 6px; padding: 4px 12px; font-size: 14px; font-weight: 500; }
+.crm-status img { width: 18px; filter: brightness(0) invert(1); }
+.crm-shares-title { color: rgba(255, 255, 255, .7); font-size: 13px; margin-bottom: 6px; }
+.crm-tabs-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.crm-tab-soon { opacity: .45; cursor: default; }
+.crm-rooms td, .crm-rooms th { vertical-align: middle; }
+.crm-rooms .main-table__goals { white-space: normal; font-size: 13px; }
+.crm-rooms .sCreateObject__control-btn { width: 36px; height: 36px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+.crm-section-row .h3 { font-size: 16px; margin: 0; }
+/* Смета во вкладке */
+.crm-estimate-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px; margin: 20px 0 16px; }
+.crm-estimate-bar > div { display: flex; flex-direction: column; gap: 4px; }
+.crm-estimate-bar__actions { flex-direction: row !important; gap: 8px !important; margin-left: auto; }
+.crm-big { font-size: 26px; font-family: AkzidenzGroteskProExtended, sans-serif; }
+.crm-vat { width: 80px; }
+.crm-muted { color: #8b9298; font-size: 13px; }
+/* Окно редактирования помещения */
+.crm-crumb { margin: -8px 0 16px; font-size: 14px; } .crm-crumb a { color: #467cf4; }
+.crm-plan { flex: 0 0 auto; width: 100%; max-width: 230px; }
+.crm-plan svg { width: 100%; } .crm-plan text { font-size: 15px; font-weight: 600; fill: #467cf4; }
+.crm-hint { color: #8b9298; font-size: 12px; margin-top: 6px; }
+.crm-h4 { font-size: 16px; margin: 22px 0 10px; }
+.crm-work__name { flex: 1 1 300px; }
+.crm-work .custom-input { margin: 0; }
+a.close-btn { display: flex; color: inherit; }
+.createObject-page .crm-table { font-size: 13px; }
+.crm-rooms table { width: 100%; }
+.crm-rooms th, .crm-rooms td { min-width: 0 !important; padding-left: 8px !important; padding-right: 8px !important; }
+.crm-rooms th:first-child, .crm-rooms td:first-child { padding-left: 24px !important; width: 24%; }
+.crm-rooms td:nth-child(8) { width: 26%; }
+.crm-rooms td:last-child { width: 96px; }
+.crm-tag { display: inline-block; background: #eef3fe; color: #2f5fd0; border-radius: 6px; padding: 2px 8px; margin: 2px 4px 2px 0; font-size: 12px; white-space: nowrap; }
+/* Окно помещения: стили createObject-page растягивают метки и кнопки — возвращаем */
+.createObject-page .crm-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.createObject-page .crm-tab { display: inline-block; width: auto; margin: 0; }
+.createObject-page .crm-table select { min-width: 130px; }
+.crm-work { flex-wrap: nowrap; align-items: flex-start; }
+.crm-work__label { display: flex; align-items: flex-start; gap: 10px; flex: 1 1 auto; cursor: pointer; margin: 0; }
+.crm-work__label .form-check-input { flex: 0 0 auto; margin-top: 2px; }
+.crm-work__name { display: flex; flex-direction: column; }
+.crm-work__name b { font-weight: 500; font-size: 14px; }
+.crm-work__name small { color: #8b9298; font-size: 12px; line-height: 1.35; }
+.crm-work .crm-param, .crm-work .crm-note { flex: 0 0 auto; margin-top: 0; }
+.createObject-page .crm-work__label, .crm-work__label { display: flex !important; }
+.crm-panel { background: #fff; padding: 4px 24px 24px; }
+.crm-panel .crm-estimate { margin: 0 -24px; }
+.crm-estimate-bar__actions .btn { display: inline-flex; align-items: center; gap: 6px; }
+.sMainInfo .crm-card { box-shadow: none; }

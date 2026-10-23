@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Calc\Dec;
 use App\Models\CrmObject;
+use App\Support\ObjectSummary;
 use App\Models\Room;
 use Illuminate\Http\Request;
 
@@ -31,16 +31,40 @@ class ObjectController extends Controller
     public function show(CrmObject $object)
     {
         $object->load('rooms.works', 'lines', 'estimates');
-        $totals = ['floor' => '0', 'walls' => '0', 'ceiling' => '0'];
-        $rooms = $object->rooms->map(function (Room $r) use (&$totals) {
-            $g = $r->geometry();
-            foreach ($totals as $k => $v) {
-                $totals[$k] = Dec::add($v, $g[$k]);
-            }
-            return ['room' => $r, 'g' => $g];
-        });
+        $rooms = $object->rooms->map(fn (Room $r) => ['room' => $r, 'g' => $r->geometry()]);
+        $sum = ObjectSummary::for($object);
 
-        return view('objects.show', compact('object', 'rooms', 'totals'));
+        return view('objects.show', compact('object', 'rooms', 'sum'));
+    }
+
+    public function edit(CrmObject $object)
+    {
+        return view('objects.edit', compact('object'));
+    }
+
+    public function update(Request $request, CrmObject $object)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'customer' => 'nullable|string|max:255',
+            'status' => 'required|in:' . implode(',', array_keys(CrmObject::STATUSES)),
+            'vat_percent' => 'required|numeric|min:0|max:30',
+            'note' => 'nullable|string|max:5000',
+        ]);
+        $data['vat_rate'] = $data['vat_percent'] / 100;
+        unset($data['vat_percent']);
+        $object->update($data);
+
+        return redirect()->route('objects.show', $object)->with('status', 'Объект сохранён');
+    }
+
+    public function destroy(CrmObject $object)
+    {
+        $name = $object->name;
+        $object->delete();
+
+        return redirect()->route('objects.index')->with('status', "Объект «{$name}» удалён");
     }
 
     public function copyRoom(CrmObject $object, Room $room)

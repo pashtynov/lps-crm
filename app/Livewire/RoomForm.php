@@ -10,7 +10,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 /** Замер помещения полями — вместо графического редактора из вёрстки, от которого клиент отказался */
-#[Layout('layouts.app')]
+#[Layout('layouts.form')]
 class RoomForm extends Component
 {
     public CrmObject $object;
@@ -152,6 +152,7 @@ class RoomForm extends Component
     {
         return view('livewire.room-form', [
             'g' => $this->geometry(),
+            'room' => $this->roomId ? Room::find($this->roomId) : null,
             'workTypes' => Catalog::workTypes(),
             'sections' => $this->object->rooms()->reorder()->distinct()->pluck('section')
                 ->merge($this->object->lines()->reorder()->distinct()->pluck('section'))->unique()->values(),

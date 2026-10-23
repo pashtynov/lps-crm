@@ -1,80 +1,73 @@
-@extends('layouts.app', ['title' => $object->name . ' — CRM Лидерпрофстрой'])
+@extends('layouts.app', ['title' => $object->name . ' — CRM Лидерпрофстрой', 'bodyClass' => 'object-page'])
 
-@php($fmt = fn ($v, $d = 2) => number_format((float) $v, $d, ',', ' '))
+@php
+    $fmt = fn ($v, $d = 2) => number_format((float) $v, $d, ',', ' ');
+    $sprite = asset('verstka/img/svg/sprite.svg');
+    $workTypes = \App\Calc\Catalog::workTypes();
+@endphp
 
 @section('content')
-    @include('partials.page-head', [
-        'heading' => $object->name,
-        'badge' => $object->statusLabel(),
-        'crumbs' => [$object->name => route('objects.show', $object)],
-        'actions' => '<a class="btn btn-accent" href="' . route('estimate', $object) . '">Смета по объекту</a>',
-    ])
+    @include('objects._hero')
 
-    <div class="sObjectDetails section">
+    <div class="sMainInfo section" id="sMainInfo">
         <div class="container-fluid">
-            <div class="details-with-toggle__stats-row row">
-                <div class="details-with-toggle__col col-md-auto"><div class="details-with-toggle__item"><span>Помещения</span><p>{{ $rooms->count() }}</p></div></div>
-                <div class="details-with-toggle__col col-md-auto"><div class="details-with-toggle__item"><span>Пол</span><p>{{ $fmt($totals['floor']) }} м²</p></div></div>
-                <div class="details-with-toggle__col col-md-auto"><div class="details-with-toggle__item"><span>Стены</span><p>{{ $fmt($totals['walls']) }} м²</p></div></div>
-                <div class="details-with-toggle__col col-md-auto"><div class="details-with-toggle__item"><span>Потолок</span><p>{{ $fmt($totals['ceiling']) }} м²</p></div></div>
-                @if ($object->lines->isNotEmpty())
-                    <div class="details-with-toggle__col col-md-auto"><div class="details-with-toggle__item"><span>Позиций с готовым объёмом</span><p>{{ $object->lines->count() }}</p></div></div>
-                @endif
-            </div>
-            @if ($object->address || $object->customer)
-                <p class="text-secondary mt-2">{{ collect([$object->address, $object->customer])->filter()->implode(' · ') }}</p>
-            @endif
-        </div>
-    </div>
+            @include('objects._tabs', ['active' => 'list'])
 
-    <div class="section">
-        <div class="container-fluid">
-            <div class="main-table main-table--2">
+            <div class="main-table crm-rooms">
                 <table>
                     <thead>
-                    <tr><th>Помещение</th><th>Где</th><th>Пол, м²</th><th>Стены, м²</th><th>Периметр, м</th><th>Работы</th><th></th></tr>
+                    <tr><th>Помещение</th><th>Под</th><th>Эт</th><th>Кв</th><th>Пол, м²</th><th>Стены, м²</th><th>Периметр, м</th><th>Работы</th><th></th></tr>
                     </thead>
                     <tbody>
-                    <tr><td class="add-more" colspan="7">
+                    <tr><td class="add-more" colspan="9">
                         <a class="main-table__add-new" href="{{ route('rooms.create', $object) }}">
-                            <svg class="icon"><use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#add"></use></svg>Добавить помещение
+                            <svg class="icon icon-add"><use xlink:href="{{ $sprite }}#add"></use></svg>Добавить помещение
                         </a>
                     </td></tr>
                     @php($section = null)
-                    @foreach ($rooms as ['room' => $r, 'g' => $g])
+                    @foreach ($rooms as $i => ['room' => $r, 'g' => $g])
                         @if ($r->section !== $section)
                             @php($section = $r->section)
-                            <tr class="crm-section-row"><td colspan="7">{{ $section }}</td></tr>
+                            <tr class="crm-section-row"><td colspan="9"><span class="h3">{{ $section }}</span></td></tr>
                         @endif
                         <tr>
-                            <td><div class="main-table__title"><a href="{{ route('rooms.edit', [$object, $r]) }}">{{ $r->name }}</a></div>
-                                <div class="text-secondary small">{{ \App\Models\Room::KINDS[$r->kind] ?? '' }}</div></td>
-                            <td>{{ $r->place() }}</td>
+                            <td>
+                                <div class="main-table__title">
+                                    <a href="{{ route('rooms.edit', [$object, $r]) }}">{{ $r->name }}</a>
+                                </div>
+                                <div class="text-secondary small">{{ \App\Models\Room::KINDS[$r->kind] ?? '' }}@if ($r->building) · дом {{ $r->building }}@endif</div>
+                            </td>
+                            <td>{{ $r->entrance ?: '—' }}</td>
+                            <td>{{ $r->floor ?: '—' }}</td>
+                            <td>{{ $r->apartment ?: '—' }}</td>
                             <td>{{ $fmt($g['floor']) }}</td>
                             <td>{{ $fmt($g['walls']) }}</td>
                             <td>{{ $fmt($g['perimeter']) }}</td>
-                            <td class="small">{{ $r->works->map(fn ($w) => \App\Calc\Catalog::workTypes()[$w->work_type]['group'] ?? $w->work_type)->unique()->implode(', ') ?: '—' }}</td>
+                            <td>
+                                @forelse ($r->works as $w)
+                                    <span class="crm-tag" title="{{ $workTypes[$w->work_type]['name'] ?? '' }}">{{ $workTypes[$w->work_type]['short'] ?? $w->work_type }}</span>
+                                @empty
+                                    <span class="text-secondary">не выбраны</span>
+                                @endforelse
+                            </td>
                             <td class="text-nowrap">
                                 <form method="post" action="{{ route('rooms.copy', [$object, $r]) }}" class="d-inline">@csrf
-                                    <button class="btn btn-light btn-sm" title="Копировать с замером и работами">Копия</button></form>
+                                    <button class="sCreateObject__control-btn btn btn-light" title="Копировать с замером и работами">
+                                        <svg class="icon icon-copy"><use xlink:href="{{ $sprite }}#copy"></use></svg></button></form>
                                 <form method="post" action="{{ route('rooms.delete', [$object, $r]) }}" class="d-inline" onsubmit="return confirm('Удалить помещение «{{ $r->name }}»?')">@csrf @method('DELETE')
-                                    <button class="btn btn-light btn-sm">✕</button></form>
+                                    <button class="sCreateObject__control-btn sCreateObject__control-btn--delete btn btn-light" title="Удалить">
+                                        <svg class="icon icon-delete"><use xlink:href="{{ $sprite }}#delete"></use></svg></button></form>
                             </td>
                         </tr>
                     @endforeach
+                    @if ($rooms->isEmpty())
+                        <tr><td colspan="9" class="text-secondary">
+                            Помещений нет@if ($object->lines->isNotEmpty()) — смета этого объекта собрана по готовым объёмам ({{ $object->lines->count() }} поз.), см. вкладку «Смета»@endif.
+                        </td></tr>
+                    @endif
                     </tbody>
                 </table>
             </div>
-
-            @if ($object->estimates->isNotEmpty())
-                <h3 class="mt-4">Сохранённые варианты сметы</h3>
-                <ul class="crm-list">
-                    @foreach ($object->estimates as $e)
-                        <li>{{ $e->title }} — {{ $fmt($e->result['total']) }} ₽ ·
-                            <a href="{{ route('estimates.xlsx', $e) }}">Excel</a> · <a href="{{ route('estimates.pdf', $e) }}" target="_blank">PDF</a></li>
-                    @endforeach
-                </ul>
-            @endif
         </div>
     </div>
 @endsection
