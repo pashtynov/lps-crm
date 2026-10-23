@@ -50,3 +50,4 @@
 .crm-estimate .crm-mat-row td { padding-top: 3px !important; padding-bottom: 3px !important; }
 .page-head h1 { justify-content: flex-start; flex-wrap: wrap; gap: 4px 12px; }
 .details-with-toggle__item span { display: block !important; color: #8b9298; font-size: 13px; }
+.sObject-card .h4 { overflow-wrap: anywhere; hyphens: auto; }

@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
     private function betancura(): void
     {
         $fx = json_decode(file_get_contents(base_path('tests/fixtures/betancura-2024-05-20.json')), true);
-        $o = CrmObject::firstOrCreate(['name' => 'Бетанкура — механизированная штукатурка (смета 20.05.2024)'], [
-            'address' => 'Нижний Новгород', 'status' => 'done', 'vat_rate' => $fx['vat_rate'],
+        $o = CrmObject::firstOrCreate(['name' => 'Бетанкура, штукатурка'], [
+            'address' => 'Нижний Новгород · смета от 20.05.2024', 'status' => 'done', 'vat_rate' => $fx['vat_rate'],
             'note' => 'Демо: объёмы и цены из сметы клиента, итог должен совпасть до копейки',
         ]);
         if ($o->lines()->exists()) {
@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
     /** Квартира с замерами: смета собирается из помещений */
     private function apartment(): void
     {
-        $o = CrmObject::firstOrCreate(['name' => 'Демо: двухкомнатная квартира'], [
+        $o = CrmObject::firstOrCreate(['name' => 'Демо: квартира'], [
             'address' => 'пример', 'status' => 'planning', 'vat_rate' => 0.22,
         ]);
         if ($o->rooms()->exists()) {

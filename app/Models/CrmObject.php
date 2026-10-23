@@ -41,6 +41,19 @@ class CrmObject extends Model
         return $this->hasMany(Estimate::class, 'object_id')->latest();
     }
 
+    /** Цвет карточки, класс бейджа и иконка — как в макете списка объектов */
+    public const STATUS_STYLE = [
+        'planning' => ['#9A52DF', 'badge-purple', 'time.svg'],
+        'work' => ['#467CF4', 'badge-primary', 'play.svg'],
+        'done' => ['#1DBA6F', 'badge-success', 'done.svg'],
+        'archive' => ['#8B9298', 'badge-secondary', 'archive.svg'],
+    ];
+
+    public function statusStyle(): array
+    {
+        return self::STATUS_STYLE[$this->status] ?? self::STATUS_STYLE['planning'];
+    }
+
     public function statusLabel(): string
     {
         return self::STATUSES[$this->status] ?? $this->status;

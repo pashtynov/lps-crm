@@ -11,7 +11,7 @@ class ObjectController extends Controller
 {
     public function index()
     {
-        $objects = CrmObject::withCount('rooms')->latest()->get();
+        $objects = CrmObject::withCount(['rooms', 'lines'])->latest()->get();
 
         return view('objects.index', compact('objects'));
     }
