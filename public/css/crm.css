@@ -38,3 +38,15 @@
 .crm-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f4f6f8; }
 .crm-login__card { width: 360px; max-width: calc(100% - 32px); }
 @media (max-width: 767px) { .crm-waste { float: none; display: block; } .crm-card { padding: 16px; } }
+
+/* Таблица сметы: у .main-table ширины колонок заданы под таблицу задач — сбрасываем */
+.crm-estimate table { width: 100%; min-width: 900px; }
+.crm-estimate th, .crm-estimate td { min-width: 0 !important; width: auto; padding: 8px 8px !important; }
+.crm-estimate th:nth-child(1), .crm-estimate td:nth-child(1) { width: 44px; padding-left: 16px !important; }
+.crm-estimate th:nth-child(2), .crm-estimate td:nth-child(2) { width: 46%; }
+.crm-estimate th:nth-child(3), .crm-estimate td:nth-child(3) { width: 48px; }
+.crm-estimate th:nth-child(n+4) { text-align: right; }
+.crm-estimate .crm-section-row td { padding: 10px 16px !important; }
+.crm-estimate .crm-mat-row td { padding-top: 3px !important; padding-bottom: 3px !important; }
+.page-head h1 { justify-content: flex-start; flex-wrap: wrap; gap: 4px 12px; }
+.details-with-toggle__item span { display: block !important; color: #8b9298; font-size: 13px; }

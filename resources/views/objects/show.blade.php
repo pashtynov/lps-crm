@@ -12,7 +12,7 @@
 
     <div class="sObjectDetails section">
         <div class="container-fluid">
-            <div class="details-with-toggle__stats-row details-with-toggle__stats-row--without-span row">
+            <div class="details-with-toggle__stats-row row">
                 <div class="details-with-toggle__col col-md-auto"><div class="details-with-toggle__item"><span>Помещения</span><p>{{ $rooms->count() }}</p></div></div>
                 <div class="details-with-toggle__col col-md-auto"><div class="details-with-toggle__item"><span>Пол</span><p>{{ $fmt($totals['floor']) }} м²</p></div></div>
                 <div class="details-with-toggle__col col-md-auto"><div class="details-with-toggle__item"><span>Стены</span><p>{{ $fmt($totals['walls']) }} м²</p></div></div>
