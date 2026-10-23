@@ -27,6 +27,6 @@ fi
 
 echo "→ бэкап базы, миграции, кэши"
 "${SSH[@]}" "cd $APP && mkdir -p ../backups && set -a && . ./.env && set +a \
-  && mysqldump -h\"\$DB_HOST\" -u\"\$DB_USERNAME\" -p\"\$DB_PASSWORD\" \"\$DB_DATABASE\" | gzip > ../backups/db-\$(date +%F_%H%M).sql.gz \
+  && MYSQL_PWD=\"\$DB_PASSWORD\" mysqldump -h\"\$DB_HOST\" -u\"\$DB_USERNAME\" \"\$DB_DATABASE\" | gzip > ../backups/db-\$(date +%F_%H%M).sql.gz \
   && ls -1t ../backups/db-*.sql.gz | tail -n +31 | xargs -r rm -- \
   && $PHP artisan migrate --force && $PHP artisan optimize:clear >/dev/null && $PHP artisan optimize >/dev/null && echo готово"
