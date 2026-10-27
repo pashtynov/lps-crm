@@ -48,4 +48,12 @@ class ConceptController extends Controller
 
         return view('concept.flat', ['house' => $house, 'h' => C::HOUSES[$house], 'flat' => $flat]);
     }
+
+    public function room(int $house, int $n, int $i)
+    {
+        $flat = C::flat($house, $n);
+        abort_unless($flat && isset($flat['rooms'][$i]), 404);
+
+        return view('concept.room', ['house' => $house, 'h' => C::HOUSES[$house], 'flat' => $flat, 'i' => $i, 'room' => $flat['rooms'][$i]]);
+    }
 }

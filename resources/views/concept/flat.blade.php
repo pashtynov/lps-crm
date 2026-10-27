@@ -51,8 +51,8 @@
                 <thead><tr><th>Помещение</th><th>Размеры, м</th><th>Пол, м²</th><th>Стены, м²</th>@foreach ($C::WORKS as $w)<th>{{ $w['name'] }}</th>@endforeach</tr></thead>
                 <tbody>
                 @foreach ($rooms as $i => $r)
-                    <tr>
-                        <td><b>{{ $r['name'] }}</b></td>
+                    <tr class="crm-row-link" onclick="location.href='{{ route('concept.room', [$house, $flat['n'], $i]) }}'">
+                        <td><a class="crm-room-link" href="{{ route('concept.room', [$house, $flat['n'], $i]) }}"><b>{{ $r['name'] }}</b><span>замер →</span></a></td>
                         <td>{{ $n($r['a']) }} × {{ $n($r['b']) }}, h {{ $n($C::HEIGHT) }}</td>
                         <td>{{ $n($r['floor_m2'], 2) }}</td><td>{{ $n($r['walls'], 2) }}</td>
                         @foreach ($flat['works'] as $code => $w)
@@ -65,7 +65,7 @@
                 </tbody>
             </table>
         </div>
-        <p class="crm-muted mt-2">В рабочей версии каждое помещение открывается в окно замера (как сейчас в CRM), а статусы по помещениям отмечает прораб с телефона.
+        <p class="crm-muted mt-2">Нажмите на помещение — откроется его замер. Статусы по помещениям прораб отмечает с телефона.
             Площади отсюда идут и в смету, и в объём работ бригады.</p>
     </div>
 @endsection

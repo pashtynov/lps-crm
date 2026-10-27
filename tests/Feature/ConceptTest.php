@@ -18,6 +18,8 @@ it('открывает все экраны концепта и не пускае
     $this->get('/concept/house/2/entrance/1')->assertOk()->assertSee('Слой:')->assertSee('МОП');
     $this->get('/concept/house/2/entrance/1/mop')->assertOk()->assertSee('Лестничная клетка')->assertSee('Техподполье');
     $this->get('/concept/house/2/flat/47')->assertOk()->assertSee('Квартира 47')->assertSee('Нет доступа')->assertSee('Кухня');
+    $this->get('/concept/house/2/flat/47/room/1')->assertOk()->assertSee('Кухня')->assertSee('Замер')->assertSee('окно кухни');
+    $this->get('/concept/house/2/flat/47/room/9')->assertNotFound();
     $this->get('/concept/house/9')->assertNotFound();
     $this->get('/concept/house/2/flat/9999')->assertNotFound();
     $this->get('/concept/schedule')->assertOk()->assertSee('сегодня');

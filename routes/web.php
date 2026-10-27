@@ -36,5 +36,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/concept/house/{house}', [ConceptController::class, 'house'])->whereNumber('house')->name('concept.house');
     Route::get('/concept/house/{house}/entrance/{section}/{view?}', [ConceptController::class, 'section'])->whereNumber(['house', 'section'])->name('concept.section');
     Route::get('/concept/house/{house}/flat/{n}', [ConceptController::class, 'flat'])->whereNumber(['house', 'n'])->name('concept.flat');
+    Route::get('/concept/house/{house}/flat/{n}/room/{i}', [ConceptController::class, 'room'])->whereNumber(['house', 'n', 'i'])->name('concept.room');
     Route::get('/concept/{tab?}', [ConceptController::class, 'object'])->name('concept');
 });
