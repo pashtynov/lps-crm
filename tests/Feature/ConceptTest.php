@@ -40,3 +40,12 @@ it('считает прогресс по м², а не по числу квар�
     $flat = ConceptData::flat(2, 47);
     expect($flat['walls'])->toBe(round(array_sum(array_column($flat['rooms'], 'walls')), 1));
 });
+
+it('открывает мастер нового объекта и страницу созданного объекта', function () {
+    $this->actingAs(User::factory()->create());
+
+    $this->get('/concept/new')->assertOk()->assertSee('conceptWizard', false)->assertSee('Создать объект')->assertSee('concept-builder.js', false);
+    $this->get('/concept/built?id=x')->assertOk()->assertSee('conceptBuilt', false)->assertSee('Объект не найден');
+    $this->get('/')->assertSee('Новый объект — мастер')->assertSee(route('concept.new'));
+    $this->get('/concept')->assertSee(route('concept.new'));
+});

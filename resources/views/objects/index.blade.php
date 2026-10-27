@@ -5,6 +5,7 @@
 @section('content')
     @include('partials.page-head', ['heading' => 'Объекты', 'crumbs' => []])
 
+    <script src="{{ asset('js/concept-builder.js') }}?v=1"></script>
     {{-- Карточки объектов — разметка макета index.html (sObject) --}}
     <div class="sObject section" id="sObject">
         <div class="container-fluid">
@@ -44,6 +45,32 @@
                             <div class="col-auto"><span class="crm-concept-badge">концепт</span></div>
                         </div>
                         <div class="sObject-card__line" style="--width: {{ $conceptPercent }}%"></div>
+                    </div>
+                </div>
+
+                {{-- Объекты, созданные в мастере концепта: хранятся в браузере --}}
+                <div x-data="conceptBuiltList()" style="display: contents">
+                <template x-for="o in items" :key="o.id">
+                    <div class="sObject__col col-sm-6 col-lg-4 col-xxl-auto">
+                        <div class="sObject-card crm-card-concept" style="--bgDefColor: #9A52DF">
+                            <a class="h4" :href="`{{ route('concept.built') }}?id=${o.id}`" x-text="o.name"></a>
+                            <p x-text="`${o.t.houses} дом(а) · ${fmt(o.t.flats)} квартир · ${fmt(o.t.mop)} МОП`"></p>
+                            <div class="sObject-card__row row">
+                                <div class="col"><div class="badge badge-purple"><img src="{{ asset('verstka/img/svg/time.svg') }}" alt="" loading="lazy"/>Планирование</div></div>
+                                <div class="col-auto"><span class="crm-concept-badge">из мастера</span></div>
+                            </div>
+                            <div class="sObject-card__line" style="--width: 0%"></div>
+                        </div>
+                    </div>
+                </template>
+                </div>
+
+                <div class="sObject__col col-sm-6 col-lg-4 col-xxl-auto">
+                    <div class="sObject-card sObject-card--addNew crm-card-concept">
+                        <div class="sObject-card__icon">
+                            <svg class="icon icon-plus"><use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#plus"></use></svg>
+                        </div>
+                        <a class="sObject-card__add" href="{{ route('concept.new') }}">Новый объект — мастер<br><small class="crm-muted">дома, подъезды, планировки · концепт</small></a>
                     </div>
                 </div>
 

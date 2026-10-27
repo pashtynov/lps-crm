@@ -29,6 +29,10 @@
                 </tbody>
             </table>
         </div>
-        <p class="crm-muted mt-2">Иерархия как в макете: объект → дом → подъезд (квартиры и МОП) → квартира → помещения. Нажмите на дом.</p>
+        <div class="d-flex align-items-center gap-3 mt-3 flex-wrap">
+            <a class="btn btn-accent" href="{{ route('concept.new') }}">+ Новый объект — мастер</a>
+            <span class="crm-muted">Иерархия как в макете: объект → дом → подъезд (квартиры и МОП) → квартира → помещения. Нажмите на дом.
+                Новый объект собирается из типовых планировок и схем подъездов.</span>
+        </div>
     </div>
 @endsection

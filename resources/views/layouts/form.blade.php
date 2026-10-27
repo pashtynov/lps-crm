@@ -8,7 +8,7 @@
     <title>{{ $title ?? 'CRM Лидерпрофстрой' }}</title>
     <link rel="shortcut icon" href="{{ asset('verstka/img/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=24">
+    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=25">
     @livewireStyles
 </head>
 {{-- Окно редактирования из макета (02-edit-room, 02-edit-object-d): без бокового меню, крестик — назад --}}

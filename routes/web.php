@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/estimates/{estimate}.pdf', [ExportController::class, 'savedPdf'])->name('estimates.pdf');
 
     Route::get('/catalog', CatalogController::class)->name('catalog');
+    Route::get('/concept/new', [ConceptController::class, 'create'])->name('concept.new');
+    Route::get('/concept/built', [ConceptController::class, 'built'])->name('concept.built');
     Route::get('/concept/house/{house}', [ConceptController::class, 'house'])->whereNumber('house')->name('concept.house');
     Route::get('/concept/house/{house}/entrance/{section}/{view?}', [ConceptController::class, 'section'])->whereNumber(['house', 'section'])->name('concept.section');
     Route::get('/concept/house/{house}/flat/{n}', [ConceptController::class, 'flat'])->whereNumber(['house', 'n'])->name('concept.flat');

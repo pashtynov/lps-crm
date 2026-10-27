@@ -56,4 +56,16 @@ class ConceptController extends Controller
 
         return view('concept.room', ['house' => $house, 'h' => C::HOUSES[$house], 'flat' => $flat, 'i' => $i, 'room' => $flat['rooms'][$i]]);
     }
+
+    /** Мастер «Новый объект»: объект → планировки → дома и подъезды → проверка. Сохраняется в браузере */
+    public function create()
+    {
+        return view('concept.new');
+    }
+
+    /** Объект, созданный мастером: данные читаются из браузера по ?id= */
+    public function built()
+    {
+        return view('concept.built');
+    }
 }
