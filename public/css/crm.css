@@ -273,3 +273,4 @@ a.close-btn { display: flex; color: inherit; }
 .crm-flat-work small { grid-column: 2 / 4; color: #8b9298; font-size: 11px; margin-top: -4px; }
 .crm-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
 .crm-mop td:nth-child(2) { white-space: nowrap; }
+.crm-card-concept { outline: 2px dashed #b8cdfb; outline-offset: -2px; }

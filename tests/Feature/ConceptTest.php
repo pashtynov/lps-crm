@@ -8,6 +8,9 @@ uses(RefreshDatabase::class);
 
 it('открывает все экраны концепта и не пускает без входа', function () {
     $this->get('/concept')->assertRedirect('/login');
+    $this->actingAs(User::factory()->create())->get('/')->assertSee('ЖК «Новая Высота»')->assertSee(route('concept'));
+    auth()->logout();
+    $this->get('/concept')->assertRedirect('/login');
     $this->actingAs(User::factory()->create());
 
     $this->get('/concept')->assertOk()->assertSee('Выполнено на')->assertSee('Дом 1')->assertSee('Дом 2');

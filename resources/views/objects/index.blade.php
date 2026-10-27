@@ -31,6 +31,22 @@
                     </div>
                 @endforeach
 
+                {{-- Концепт следующих этапов: примерный ЖК, в базе не хранится --}}
+                @php($conceptPercent = \App\Support\ConceptData::overall())
+                <div class="sObject__col col-sm-6 col-lg-4 col-xxl-auto">
+                    <div class="sObject-card crm-card-concept" style="--bgDefColor: #467CF4">
+                        <a class="h4" href="{{ route('concept') }}">{{ \App\Support\ConceptData::OBJECT }}</a>
+                        <p>{{ count(\App\Support\ConceptData::HOUSES) }} дома · {{ count(\App\Support\ConceptData::units(null, null, false)) }} квартир · готовность {{ $conceptPercent }}%</p>
+                        <div class="sObject-card__row row">
+                            <div class="col">
+                                <div class="badge badge-primary"><img src="{{ asset('verstka/img/svg/play.svg') }}" alt="" loading="lazy"/>В работе</div>
+                            </div>
+                            <div class="col-auto"><span class="crm-concept-badge">концепт</span></div>
+                        </div>
+                        <div class="sObject-card__line" style="--width: {{ $conceptPercent }}%"></div>
+                    </div>
+                </div>
+
                 <div class="sObject__col col-sm-6 col-lg-4 col-xxl-auto">
                     <div class="sObject-card sObject-card--addNew">
                         <div class="sObject-card__icon">
