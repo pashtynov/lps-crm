@@ -283,3 +283,10 @@ a.close-btn { display: flex; color: inherit; }
 .crm-photos small { font-size: 9px; color: #8b9298; text-align: center; line-height: 1.1; } .crm-photos .add { border: 1px dashed #b8bfc5; background: transparent; color: #8b9298; }
 .crm-history { list-style: none; padding: 0; margin: 0; } .crm-history li { display: flex; flex-direction: column; padding: 6px 0; border-top: 1px solid #e3e6e9; font-size: 13px; }
 .crm-history li span { color: #8b9298; font-size: 12px; }
+/* Кольцо: текст всегда помещается внутри — размеры от диаметра, а не от стиля заголовков */
+.circular-progress-bar .number { width: 72%; }
+.circular-progress-bar .number h2 { font-size: 1.25rem !important; line-height: 1.1 !important; margin-bottom: 2px !important; white-space: nowrap; }
+.circular-progress-bar .number p { font-size: 11px !important; line-height: 1.2 !important; margin: 0 !important; }
+.crm-ring svg { width: 8.5rem !important; }
+.crm-ring .number h2 { font-size: 1.15rem !important; }
+.crm-ring .number p { font-size: 10px !important; }
