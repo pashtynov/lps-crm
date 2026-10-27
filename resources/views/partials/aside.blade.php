@@ -8,11 +8,11 @@
 									<svg class="icon icon-objects ">
 										<use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#objects"></use>
 									</svg><span>Объекты</span></a></li>
-							<li><a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Задачи">
+							<li><a href="{{ route('concept', 'today') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Задачи (концепт)">
 									<svg class="icon icon-tasks ">
 										<use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#tasks"></use>
 									</svg><span>Задачи</span></a></li>
-							<li><a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Бригады">
+							<li><a href="{{ route('concept', 'brigades') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Бригады (концепт)">
 									<svg class="icon icon-workers ">
 										<use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#workers"></use>
 									</svg><span>Бригады</span></a></li>

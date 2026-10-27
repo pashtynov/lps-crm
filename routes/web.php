@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\ConceptController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ObjectController;
 use App\Livewire\EstimateView;
@@ -32,4 +33,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/estimates/{estimate}.pdf', [ExportController::class, 'savedPdf'])->name('estimates.pdf');
 
     Route::get('/catalog', CatalogController::class)->name('catalog');
+    Route::get('/concept/{tab?}', ConceptController::class)->name('concept');
 });
