@@ -17,14 +17,14 @@
                     <div class="crm-brigade__nums">
                         <div><span>Сделано</span><b>{{ $fmt($b['done']) }} м²</b></div>
                         <div><span>Квартир в работе</span><b>{{ $b['flats_work'] }}</b></div>
-                        <div><span>Начислено (сдельно)</span><b>{{ $fmt($b['earned']) }} ₽</b></div>
+                        <div><span>Начислено с начала объекта</span><b>{{ $fmt($b['earned']) }} ₽</b></div>
                     </div>
                 </div>
             @endforeach
             <div class="crm-brigade crm-brigade--alert">
                 <h3>Нужна бригада</h3>
-                <p>Шпатлёвка, подъезд 1, этаж 3 — фронт работ готов, бригада не назначена.</p>
-                <a class="btn btn-light btn-sm" href="{{ route('concept', 'chess') }}">Назначить на шахматке</a>
+                <p>Шпатлёвка, дом 2, подъезд 1, этаж 3 — фронт работ готов, бригада не назначена.</p>
+                <a class="btn btn-light btn-sm" href="{{ route('concept.section', [2, 1]) }}">Назначить на шахматке</a>
             </div>
         </div>
         <p class="crm-muted mt-3">Начислено = принятые и сделанные м² × сдельная ставка вида работ — как в ваших таблицах монтажа потолков (багет и натяжка по 50 ₽/м² делятся на бригаду).

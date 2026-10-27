@@ -3,21 +3,28 @@
 namespace App\Support;
 
 /**
- * Примерные данные для концепта следующих этапов (шахматка, график, бригады, «Сегодня» прораба).
- * В базу ничего не пишется: всё считается из одного описания объекта, детерминированно.
+ * Примерные данные для концепта следующих этапов по иерархии макета 2023 года:
+ * Объект (ЖК) → Дом → Подъезд → Квартиры и МОП → Квартира с помещениями.
+ * В базу ничего не пишется: всё считается из описания ниже, детерминированно.
  */
 final class ConceptData
 {
-    public const OBJECT = 'ЖК «Новая Высота», дом 2';
+    public const OBJECT = 'ЖК «Новая Высота»';
 
-    /** Типовые планировки: площадь стен и пола, м² (штукатурка — стены, стяжка и потолки — пол) */
+    public const HEIGHT = 2.7;
+
+    /** Типовые планировки: помещения [название, длина, ширина, площадь проёмов] — площади как в замере */
     public const LAYOUTS = [
-        '1К-38' => ['walls' => 74.0, 'floor_m2' => 34.5, 'rooms' => 4],
-        '2К-54' => ['walls' => 104.0, 'floor_m2' => 49.8, 'rooms' => 6],
-        '3К-72' => ['walls' => 136.0, 'floor_m2' => 66.2, 'rooms' => 8],
+        '1К-38' => [['Комната', 4.3, 4.0, 3.4], ['Кухня', 3.5, 2.6, 3.2], ['Прихожая', 3.0, 1.8, 4.8], ['Санузел', 2.0, 1.8, 1.6]],
+        '2К-54' => [['Комната 1', 4.2, 3.9, 3.4], ['Комната 2', 3.6, 3.2, 3.2], ['Кухня', 3.4, 2.9, 3.2], ['Прихожая', 4.2, 1.6, 6.4], ['Ванная', 2.0, 1.7, 1.6], ['Туалет', 1.5, 0.9, 1.6]],
+        '3К-72' => [['Комната 1', 4.5, 4.0, 3.4], ['Комната 2', 3.9, 3.3, 3.2], ['Комната 3', 3.6, 3.0, 3.2], ['Кухня', 3.6, 3.1, 3.2], ['Прихожая', 5.0, 1.7, 8.0], ['Ванная', 2.2, 1.7, 1.6], ['Туалет', 1.5, 0.9, 1.6]],
     ];
 
-    /** Виды работ в порядке выполнения; ставка — сдельная оплата бригаде за м², цена — для «выполнено на ₽» */
+    /** МОП подъезда: на каждом этаже и отдельные помещения */
+    private const MOP_FLOOR = [['Лифтовой холл и коридор', 6.0, 4.2, 8.0], ['Лестничная клетка', 5.6, 2.8, 2.0]];
+    private const MOP_EXTRA = [['Тамбур и вестибюль', 1, 6.0, 4.0, 6.0], ['Техподполье', 0, 12.0, 6.0, 4.0], ['Выход на кровлю', 99, 3.0, 2.5, 1.6]];
+
+    /** Виды работ по порядку; ставка — сдельная оплата за м², цена — для «выполнено на ₽» */
     public const WORKS = [
         'plaster' => ['name' => 'Штукатурка', 'basis' => 'walls', 'rate' => 180, 'price' => 455, 'color' => '#F4B13E'],
         'screed' => ['name' => 'Стяжка', 'basis' => 'floor_m2', 'rate' => 150, 'price' => 520, 'color' => '#467CF4'],
@@ -30,81 +37,164 @@ final class ConceptData
         2 => ['name' => 'Бригада 2', 'lead' => 'бригадир Андрей', 'people' => 4, 'work' => 'plaster'],
         3 => ['name' => 'Бригада 3', 'lead' => 'бригадир Михаил', 'people' => 3, 'work' => 'screed'],
         4 => ['name' => 'Бригада 4 «Тандем»', 'lead' => 'бригадир Игорь', 'people' => 2, 'work' => 'ceiling'],
+        5 => ['name' => 'Бригада 5', 'lead' => 'бригадир Олег', 'people' => 4, 'work' => 'putty'],
     ];
-
-    public const FLOORS = 10;
 
     /**
-     * Где сейчас фронт каждой работы: этажи ниже — сделано, фронт — в работе, выше — не начато.
-     * [подъезд => [работа => [последний сделанный этаж, этажи в работе, бригада]]]
+     * Дома: подъезды с планировками на этаже и фронт работ.
+     * front: [подъезд => [работа => [последний сделанный этаж, этажи в работе, бригада]]]
      */
-    private const FRONT = [
-        1 => ['plaster' => [7, [8, 9], 1], 'screed' => [5, [6], 3], 'putty' => [2, [3], 0], 'ceiling' => [1, [2], 4]],
-        2 => ['plaster' => [4, [5, 6], 2], 'screed' => [2, [3], 3], 'putty' => [0, [], 0], 'ceiling' => [0, [], 0]],
+    public const HOUSES = [
+        1 => ['name' => 'Дом 1', 'status' => 'Отделка завершается', 'floors' => 9,
+            'sections' => [1 => ['1К-38', '2К-54', '2К-54', '1К-38'], 2 => ['2К-54', '3К-72', '2К-54'], 3 => ['1К-38', '2К-54', '2К-54', '1К-38']],
+            'front' => [
+                1 => ['plaster' => [9, [], 1], 'screed' => [9, [], 3], 'putty' => [7, [8, 9], 5], 'ceiling' => [5, [6], 4]],
+                2 => ['plaster' => [9, [], 1], 'screed' => [9, [], 3], 'putty' => [6, [7], 5], 'ceiling' => [4, [5], 4]],
+                3 => ['plaster' => [9, [], 2], 'screed' => [9, [], 3], 'putty' => [9, [], 5], 'ceiling' => [7, [8], 4]],
+            ]],
+        2 => ['name' => 'Дом 2', 'status' => 'В работе', 'floors' => 10,
+            'sections' => [1 => ['1К-38', '2К-54', '3К-72', '2К-54', '1К-38', '2К-54'], 2 => ['2К-54', '3К-72', '3К-72', '2К-54']],
+            'front' => [
+                1 => ['plaster' => [7, [8, 9], 1], 'screed' => [5, [6], 3], 'putty' => [2, [3], 0], 'ceiling' => [1, [2], 4]],
+                2 => ['plaster' => [4, [5, 6], 2], 'screed' => [2, [3], 3], 'putty' => [0, [], 0], 'ceiling' => [0, [], 0]],
+            ]],
     ];
 
-    private const SECTION_FLATS = [1 => ['1К-38', '2К-54', '3К-72', '2К-54', '1К-38', '2К-54'], 2 => ['2К-54', '3К-72', '3К-72', '2К-54']];
+    private const PROBLEMS = [
+        '2-1-8-4' => 'Нет доступа: собственник не отдал ключи',
+        '2-2-5-1' => 'Мокрые стены после протечки кровли',
+        '1-2-7-2' => 'Трещина в стяжке, нужен переделка участка',
+    ];
 
-    /** Шахматка: [подъезд => [этаж => [квартира…]]], сверху вниз */
-    public static function chess(): array
+    private static array $cache = [];
+
+    /** Помещение по размерам: площадь пола и стен за вычетом проёмов */
+    private static function room(string $name, float $a, float $b, float $openings): array
     {
-        $out = [];
-        $number = 1;
-        foreach (self::SECTION_FLATS as $section => $types) {
-            for ($floor = 1; $floor <= self::FLOORS; $floor++) {
-                foreach ($types as $i => $type) {
-                    $flat = ['n' => $number++, 'section' => $section, 'floor' => $floor, 'type' => $type] + self::LAYOUTS[$type];
-                    // замер: не замерены 10 этаж второго подъезда (нет доступа)
-                    $flat['measured'] = ! ($section === 2 && $floor === 10);
-                    $flat['works'] = [];
-                    foreach (self::FRONT[$section] as $code => [$done, $inWork, $brigade]) {
-                        $status = $floor <= $done ? 'done' : (in_array($floor, $inWork, true) ? 'work' : 'todo');
-                        // на этаже в работе часть квартир уже готова
-                        if ($status === 'work' && $i < intdiv(count($types), 2) && $floor === min($inWork)) {
-                            $status = 'done';
-                        }
-                        if ($status === 'done' && $floor <= $done - 2) {
-                            $status = 'accepted';
-                        }
-                        $flat['works'][$code] = ['status' => $status, 'brigade' => $status === 'todo' ? null : ($brigade ?: null)];
-                    }
-                    $flat['problem'] = match (true) {
-                        $section === 1 && $floor === 8 && $i === 4 => 'Нет доступа: собственник не отдал ключи',
-                        $section === 2 && $floor === 5 && $i === 1 => 'Мокрые стены после протечки кровли',
-                        default => null,
-                    };
-                    // проблемная квартира стоит: штукатурка не закрыта
-                    if ($flat['problem'] && $flat['works']['plaster']['status'] !== 'todo') {
-                        $flat['works']['plaster']['status'] = 'work';
-                    }
-                    $out[$section][$floor][] = $flat;
-                }
-            }
-            krsort($out[$section]);
-        }
-
-        return $out;
+        return ['name' => $name, 'a' => $a, 'b' => $b, 'floor_m2' => round($a * $b, 2),
+            'walls' => round(2 * ($a + $b) * self::HEIGHT - $openings, 2), 'openings' => $openings];
     }
 
-    /** Прогресс по видам работ: м² сделано / всего, ₽ выполнено */
-    public static function progress(): array
+    private static function status(array $front, string $code, int $floor, int $lag = 0): array
+    {
+        [$done, $inWork, $brigade] = $front[$code];
+        $done -= $lag;
+        $inWork = $lag ? array_filter([$done + 1, $done + 2], fn ($f) => $f <= $front[$code][0]) : $inWork;
+        $status = $floor <= $done ? ($floor <= $done - 2 ? 'accepted' : 'done') : (in_array($floor, $inWork, true) ? 'work' : 'todo');
+
+        return ['status' => $status, 'brigade' => $status === 'todo' ? null : ($brigade ?: null)];
+    }
+
+    /** Все квартиры и МОП дома: [подъезд => ['flats' => [этаж => [кв…]], 'mop' => [...]]] */
+    public static function house(int $house): array
+    {
+        if (isset(self::$cache[$house])) {
+            return self::$cache[$house];
+        }
+        $h = self::HOUSES[$house];
+        $out = [];
+        $number = 1;
+        foreach ($h['sections'] as $section => $types) {
+            $front = $h['front'][$section];
+            for ($floor = 1; $floor <= $h['floors']; $floor++) {
+                foreach ($types as $i => $type) {
+                    $rooms = array_map(fn ($r) => self::room(...$r), self::LAYOUTS[$type]);
+                    $flat = ['n' => $number++, 'house' => $house, 'section' => $section, 'floor' => $floor, 'type' => $type, 'kind' => 'flat',
+                        'rooms' => $rooms, 'walls' => round(array_sum(array_column($rooms, 'walls')), 1),
+                        'floor_m2' => round(array_sum(array_column($rooms, 'floor_m2')), 1),
+                        'measured' => ! ($house === 2 && $section === 2 && $floor === 10), 'works' => []];
+                    foreach (array_keys(self::WORKS) as $code) {
+                        $flat['works'][$code] = self::status($front, $code, $floor);
+                        // на этаже в работе половина квартир уже готова
+                        if ($flat['works'][$code]['status'] === 'work' && $i < intdiv(count($types), 2) && $floor === min($front[$code][1] ?: [0])) {
+                            $flat['works'][$code]['status'] = 'done';
+                        }
+                    }
+                    $flat['problem'] = self::PROBLEMS["$house-$section-$floor-$i"] ?? null;
+                    if ($flat['problem'] && $flat['works']['plaster']['status'] !== 'todo' && $house === 2) {
+                        $flat['works']['plaster']['status'] = 'work';
+                    }
+                    $out[$section]['flats'][$floor][] = $flat;
+                }
+            }
+            krsort($out[$section]['flats']);
+
+            // МОП: отделка идёт с отставанием на два этажа от квартир
+            $mop = [];
+            foreach (self::MOP_EXTRA as [$name, $floor, $a, $b, $op]) {
+                $floor = $floor === 99 ? $h['floors'] : $floor;
+                $mop[] = self::mopItem($name, $floor, self::room($name, $a, $b, $op), $front, $house, $section);
+            }
+            for ($floor = 1; $floor <= $h['floors']; $floor++) {
+                foreach (self::MOP_FLOOR as [$name, $a, $b, $op]) {
+                    $mop[] = self::mopItem("$name, эт. $floor", $floor, self::room($name, $a, $b, $op), $front, $house, $section);
+                }
+            }
+            usort($mop, fn ($x, $y) => $x['floor'] <=> $y['floor']);
+            $out[$section]['mop'] = $mop;
+        }
+
+        return self::$cache[$house] = $out;
+    }
+
+    private static function mopItem(string $name, int $floor, array $room, array $front, int $house, int $section): array
+    {
+        $works = [];
+        foreach (array_keys(self::WORKS) as $code) {
+            $works[$code] = $code === 'ceiling' ? ['status' => 'todo', 'brigade' => null] : self::status($front, $code, max($floor, 1), 2);
+        }
+
+        return ['name' => $name, 'floor' => $floor, 'house' => $house, 'section' => $section, 'kind' => 'mop',
+            'walls' => $room['walls'], 'floor_m2' => $room['floor_m2'], 'works' => $works];
+    }
+
+    /** Плоский список квартир и МОП в области: весь объект, дом или подъезд */
+    public static function units(?int $house = null, ?int $section = null, bool $withMop = true): array
+    {
+        $units = [];
+        foreach ($house ? [$house] : array_keys(self::HOUSES) as $hn) {
+            foreach (self::house($hn) as $sn => $s) {
+                if ($section && $sn !== $section) {
+                    continue;
+                }
+                foreach ($s['flats'] as $flats) {
+                    array_push($units, ...$flats);
+                }
+                if ($withMop) {
+                    array_push($units, ...$s['mop']);
+                }
+            }
+        }
+
+        return $units;
+    }
+
+    public static function flat(int $house, int $n): ?array
+    {
+        foreach (self::units($house, null, false) as $f) {
+            if ($f['n'] === $n) {
+                return $f;
+            }
+        }
+
+        return null;
+    }
+
+    /** Прогресс по видам работ в м² и ₽ */
+    public static function progress(?int $house = null, ?int $section = null): array
     {
         $res = [];
         foreach (self::WORKS as $code => $w) {
             $res[$code] = ['name' => $w['name'], 'color' => $w['color'], 'total' => 0, 'done' => 0, 'work' => 0];
         }
-        foreach (self::chess() as $floors) {
-            foreach ($floors as $flats) {
-                foreach ($flats as $f) {
-                    foreach ($f['works'] as $code => $w) {
-                        $m2 = $f[self::WORKS[$code]['basis']];
-                        $res[$code]['total'] += $m2;
-                        if (in_array($w['status'], ['done', 'accepted'], true)) {
-                            $res[$code]['done'] += $m2;
-                        } elseif ($w['status'] === 'work') {
-                            $res[$code]['work'] += $m2;
-                        }
-                    }
+        foreach (self::units($house, $section) as $u) {
+            foreach ($u['works'] as $code => $w) {
+                $m2 = $u[self::WORKS[$code]['basis']];
+                $res[$code]['total'] += $m2;
+                if (in_array($w['status'], ['done', 'accepted'], true)) {
+                    $res[$code]['done'] += $m2;
+                } elseif ($w['status'] === 'work') {
+                    $res[$code]['work'] += $m2;
                 }
             }
         }
@@ -117,67 +207,77 @@ final class ConceptData
         return $res;
     }
 
-    /**
-     * График: план по неделям (неделя 1 = 6 окт) и факт. Отставание в днях — из сравнения
-     * плановой и фактической доли сделанного на сегодня (неделя 4).
-     */
+    /** Общий процент готовности области: сделанные ₽ / все ₽ по смете */
+    public static function overall(?int $house = null, ?int $section = null): int
+    {
+        $p = self::progress($house, $section);
+        $total = array_sum(array_column($p, 'money_total'));
+
+        return $total ? (int) round(array_sum(array_column($p, 'money_done')) / $total * 100) : 0;
+    }
+
+    /** Сводка по количеству: квартир, МОП, помещений, площадь */
+    public static function counts(?int $house = null, ?int $section = null): array
+    {
+        $flats = self::units($house, $section, false);
+        $all = self::units($house, $section);
+
+        return [
+            'flats' => count($flats),
+            'mop' => count($all) - count($flats),
+            'rooms' => array_sum(array_map(fn ($f) => count($f['rooms']), $flats)),
+            'floor_m2' => array_sum(array_column($all, 'floor_m2')),
+            'walls' => array_sum(array_column($all, 'walls')),
+            'problems' => count(array_filter($flats, fn ($f) => $f['problem'])),
+        ];
+    }
+
+    /** График: план по неделям (неделя 1 = 6 окт) и факт; отставание — сравнение доли на сегодня (середина 4-й недели) */
     public static function schedule(): array
     {
         $plan = [
-            ['work' => 'plaster', 'section' => 1, 'from' => 1, 'to' => 6],
-            ['work' => 'plaster', 'section' => 2, 'from' => 2, 'to' => 7],
-            ['work' => 'screed', 'section' => 1, 'from' => 2, 'to' => 7],
-            ['work' => 'screed', 'section' => 2, 'from' => 3, 'to' => 8],
-            ['work' => 'putty', 'section' => 1, 'from' => 3, 'to' => 9],
-            ['work' => 'putty', 'section' => 2, 'from' => 5, 'to' => 10],
-            ['work' => 'ceiling', 'section' => 1, 'from' => 4, 'to' => 10],
-            ['work' => 'ceiling', 'section' => 2, 'from' => 6, 'to' => 11],
+            [1, 1, 'putty', 1, 5], [1, 1, 'ceiling', 1, 7], [1, 2, 'putty', 1, 5], [1, 2, 'ceiling', 2, 8], [1, 3, 'ceiling', 1, 6],
+            [2, 1, 'plaster', 1, 6], [2, 2, 'plaster', 2, 7], [2, 1, 'screed', 2, 7], [2, 2, 'screed', 3, 8],
+            [2, 1, 'putty', 3, 9], [2, 2, 'putty', 5, 10], [2, 1, 'ceiling', 4, 10], [2, 2, 'ceiling', 6, 11],
         ];
-        $today = 4.4; // середина 4-й недели
-        $chess = self::chess();
-        foreach ($plan as &$row) {
+        $today = 4.4;
+        $rows = [];
+        foreach ($plan as [$house, $section, $work, $from, $to]) {
             $total = $done = 0;
-            foreach ($chess[$row['section']] as $flats) {
-                foreach ($flats as $f) {
-                    $m2 = $f[self::WORKS[$row['work']]['basis']];
-                    $total += $m2;
-                    $done += in_array($f['works'][$row['work']]['status'], ['done', 'accepted'], true) ? $m2 : 0;
-                }
+            foreach (self::units($house, $section) as $u) {
+                $m2 = $u[self::WORKS[$work]['basis']];
+                $total += $m2;
+                $done += in_array($u['works'][$work]['status'], ['done', 'accepted'], true) ? $m2 : 0;
             }
-            $len = $row['to'] - $row['from'] + 1;
-            $planShare = max(0, min(1, ($today - $row['from'] + 1) / $len));
-            $row['fact'] = $total ? $done / $total : 0;
-            $row['plan_share'] = $planShare;
-            $row['lag_days'] = (int) round(($planShare - $row['fact']) * $len * 7);
-            $row['name'] = self::WORKS[$row['work']]['name'];
-            $row['color'] = self::WORKS[$row['work']]['color'];
+            $len = $to - $from + 1;
+            $planShare = max(0, min(1, ($today - $from + 1) / $len));
+            $fact = $total ? $done / $total : 0;
+            $rows[] = ['house' => $house, 'section' => $section, 'work' => $work, 'from' => $from, 'to' => $to,
+                'fact' => $fact, 'plan_share' => $planShare, 'lag_days' => (int) round(($planShare - $fact) * $len * 7),
+                'name' => self::WORKS[$work]['name'], 'color' => self::WORKS[$work]['color']];
         }
 
-        return ['rows' => $plan, 'weeks' => 11, 'today' => $today, 'start' => '2026-10-06'];
+        return ['rows' => $rows, 'weeks' => 11, 'today' => $today, 'start' => '2026-10-06'];
     }
 
-    /** Бригады: где работают, сколько м² сделали, сколько заработали по сдельной ставке */
+    /** Бригады: где работают, сколько м² сделали, сколько начислено сдельно */
     public static function brigades(): array
     {
         $res = [];
         foreach (self::BRIGADES as $id => $b) {
             $res[$id] = $b + ['done' => 0, 'work_floors' => [], 'flats_work' => 0];
         }
-        foreach (self::chess() as $section => $floors) {
-            foreach ($floors as $floor => $flats) {
-                foreach ($flats as $f) {
-                    foreach ($f['works'] as $code => $w) {
-                        if (! $w['brigade']) {
-                            continue;
-                        }
-                        $m2 = $f[self::WORKS[$code]['basis']];
-                        if (in_array($w['status'], ['done', 'accepted'], true)) {
-                            $res[$w['brigade']]['done'] += $m2;
-                        } else {
-                            $res[$w['brigade']]['work_floors']["п.{$section} эт.{$floor}"] = true;
-                            $res[$w['brigade']]['flats_work']++;
-                        }
-                    }
+        foreach (self::units() as $u) {
+            foreach ($u['works'] as $code => $w) {
+                if (! $w['brigade']) {
+                    continue;
+                }
+                $m2 = $u[self::WORKS[$code]['basis']];
+                if (in_array($w['status'], ['done', 'accepted'], true)) {
+                    $res[$w['brigade']]['done'] += $m2;
+                } elseif ($u['kind'] === 'flat') {
+                    $res[$w['brigade']]['work_floors']["д.{$u['house']} п.{$u['section']} эт.{$u['floor']}"] = true;
+                    $res[$w['brigade']]['flats_work']++;
                 }
             }
         }

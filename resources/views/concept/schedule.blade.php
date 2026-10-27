@@ -30,7 +30,7 @@
                     @endphp
                     <div class="crm-gantt__row">
                         <div class="crm-gantt__label">
-                            <b>{{ $r['name'] }}</b><small>подъезд {{ $r['section'] }}</small>
+                            <b>{{ $r['name'] }}</b><small>дом {{ $r['house'] }} · подъезд {{ $r['section'] }}</small>
                             @if ($r['lag_days'] > 2)
                                 <span class="crm-lag bad">−{{ $r['lag_days'] }} дн</span>
                             @elseif ($r['lag_days'] < 0)

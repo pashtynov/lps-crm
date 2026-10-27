@@ -247,3 +247,29 @@ a.close-btn { display: flex; color: inherit; }
 @media (max-width: 991px) { .crm-today { grid-template-columns: 1fr; } }
 .crm-tab-concept { position: relative; border-style: dashed !important; }
 .crm-tab-concept sup { font-size: 9px; color: #467cf4; margin-left: 4px; top: -0.8em; text-transform: uppercase; letter-spacing: .03em; }
+/* концепт: иерархия */
+.crm-concept-badge { font-size: 12px; color: #2f5fd0; background: #eef3fe; border-radius: 10px; padding: 4px 10px; }
+.crm-scope { display: grid; grid-template-columns: 170px 1fr 1.2fr; gap: 16px; background: #fff; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; align-items: center; }
+.crm-scope__ring { display: flex; flex-direction: column; align-items: center; gap: 4px; } .crm-scope__ring small { color: #8b9298; font-size: 12px; }
+.crm-ring .number, .crm-ring .number h2 { color: #2a3137 !important; } .crm-ring svg { width: 7.5rem; }
+.crm-scope__counts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 16px; }
+.crm-scope__counts div { display: flex; flex-direction: column; } .crm-scope__counts span { color: #8b9298; font-size: 12px; } .crm-scope__counts b { font-size: 16px; }
+.crm-scope__counts .bad b { color: #e94410; }
+.crm-scope__works { display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 991px) { .crm-scope { grid-template-columns: 1fr; } }
+.crm-concept-table { background: #fff; border-radius: 12px; overflow-x: auto; }
+.crm-concept-table th, .crm-concept-table td { min-width: 0 !important; padding: 10px 12px !important; vertical-align: middle; }
+.crm-concept-table th:first-child, .crm-concept-table td:first-child { padding-left: 24px !important; }
+.crm-row-link { cursor: pointer; transition: background .15s; } .crm-row-link:hover { background: #f8f9fb; }
+.crm-concept-table td.crm-mini-bars { min-width: 240px !important; width: 30%; }
+.crm-mini-bars div { display: grid; grid-template-columns: 70px 1fr; align-items: center; gap: 8px; font-size: 11px; color: #5d656b; }
+.crm-mini-bars div span { order: -1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crm-mini-bars i { display: block; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--c) var(--w), #eef1f4 var(--w)); }
+.crm-st { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+.crm-st.st-todo { background: #eef1f4; color: #5d656b; } .crm-st.st-work { background: #fde7b3; color: #7a5200; }
+.crm-st.st-done { background: #9fe0bf; color: #0f5132; } .crm-st.st-accepted { background: #1dba6f; color: #fff; }
+.crm-flat-nav { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.crm-flat-work { display: grid; grid-template-columns: 12px 1fr auto; gap: 4px 8px; align-items: center; font-size: 13px; }
+.crm-flat-work small { grid-column: 2 / 4; color: #8b9298; font-size: 11px; margin-top: -4px; }
+.crm-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.crm-mop td:nth-child(2) { white-space: nowrap; }

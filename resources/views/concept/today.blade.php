@@ -5,20 +5,17 @@
     @php
         // задания на сегодня: работы «в работе», сгруппированные по бригаде, подъезду и этажу
         $tasks = [];
-        foreach ($chess as $section => $floors) {
-            foreach ($floors as $floor => $flats) {
-                foreach ($flats as $f) {
-                    foreach ($f['works'] as $code => $w) {
-                        if ($w['status'] !== 'work') continue;
-                        $k = ($w['brigade'] ?? 0) . "-$code-$section-$floor";
-                        $tasks[$k] ??= ['brigade' => $w['brigade'] ? \App\Support\ConceptData::BRIGADES[$w['brigade']]['name'] : 'Без бригады',
-                            'work' => \App\Support\ConceptData::WORKS[$code]['name'], 'color' => \App\Support\ConceptData::WORKS[$code]['color'],
-                            'where' => "Подъезд $section, этаж $floor", 'flats' => [], 'm2' => 0, 'problem' => null];
-                        $tasks[$k]['flats'][] = $f['n'];
-                        $tasks[$k]['m2'] += $f[\App\Support\ConceptData::WORKS[$code]['basis']];
-                        $tasks[$k]['problem'] ??= $f['problem'] ? "кв. {$f['n']}: {$f['problem']}" : null;
-                    }
-                }
+        $C = \App\Support\ConceptData::class;
+        foreach ($C::units(null, null, false) as $f) {
+            foreach ($f['works'] as $code => $w) {
+                if ($w['status'] !== 'work') continue;
+                $k = ($w['brigade'] ?? 0) . "-$code-{$f['house']}-{$f['section']}-{$f['floor']}";
+                $tasks[$k] ??= ['brigade' => $w['brigade'] ? $C::BRIGADES[$w['brigade']]['name'] : 'Без бригады',
+                    'work' => $C::WORKS[$code]['name'], 'color' => $C::WORKS[$code]['color'],
+                    'where' => "Дом {$f['house']}, подъезд {$f['section']}, этаж {$f['floor']}", 'flats' => [], 'm2' => 0, 'problem' => null];
+                $tasks[$k]['flats'][] = $f['n'];
+                $tasks[$k]['m2'] += $f[$C::WORKS[$code]['basis']];
+                $tasks[$k]['problem'] ??= $f['problem'] ? "кв. {$f['n']}: {$f['problem']}" : null;
             }
         }
         $tasks = array_values($tasks);
