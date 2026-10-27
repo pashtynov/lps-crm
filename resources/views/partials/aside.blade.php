@@ -23,8 +23,10 @@
 						</ul>
 					</div>
 					<div class="avatar-wrap">
-						<a class="avatar" href="#"><span>{{ $initials ?? '' }}</span>
-						</a>
+						<form method="post" action="{{ route('logout') }}" onsubmit="return confirm('Выйти из CRM?')">
+							@csrf
+							<button class="avatar crm-avatar-btn" title="{{ auth()->user()?->name }} — выйти"><span>{{ $initials ?? '' }}</span></button>
+						</form>
 					</div>
 					<a class="aside-wrap__settings" href="{{ route('catalog') }}" title="Справочник норм и цен">
 						<svg class="icon icon-settings ">

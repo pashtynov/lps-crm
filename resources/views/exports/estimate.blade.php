@@ -8,10 +8,29 @@
     .num { text-align: right; white-space: nowrap; } .sec td { background: #f6f7f9; font-weight: bold; }
     .mat td { color: #444; } .sub td { font-weight: bold; }
     .totals td { border: none; padding: 0.8mm 1.5mm; font-size: 10pt; }
+    .top td, .sign td { border: none; padding: 0; vertical-align: top; } .right { text-align: right; }
+    .sign { margin-top: 5mm; font-size: 9pt; line-height: 1.5; }
+    .title { text-align: center; margin: 6mm 0 2mm; } .title h1 { margin: 3mm 0 1mm; }
+    .obj { font-size: 10pt; } .cap { font-size: 7.5pt; color: #777; border-top: 0.2mm solid #999; margin: 0.5mm 25% 0; }
+    .note { margin: 0.5mm 0; }
 </style>
-<h1>{{ $object->name }}</h1>
-<div class="muted">{{ collect([$object->address, $object->customer])->filter()->implode(' · ') }}</div>
-<div><b>СМЕТНЫЙ РАСЧЕТ</b> · {{ $title }}</div>
+<table class="top"><tr>
+    <td style="width:30%"><img src="{{ resource_path('pdf/logo-lps.svg') }}" style="height:16mm"></td>
+    <td class="right muted">Приложение № 1 к договору подряда № ________ от «____» ______________ 20___ г.</td>
+</tr></table>
+
+<table class="sign"><tr>
+    <td style="width:50%"><b>СОГЛАСОВАНО:</b><br>{{ config('crm.director_title') }} {{ config('crm.company') }}<br><br>_________________ {{ config('crm.director') }}<br>«____» ______________ 20___ г.</td>
+    <td><b>УТВЕРЖДАЮ:</b><br>{{ $object->customer ?: 'Заказчик' }}<br><br>_________________ /________________/<br>«____» ______________ 20___ г.</td>
+</tr></table>
+
+<div class="title">
+    <div class="obj">«{{ $object->name }}»@if ($object->address), {{ $object->address }}@endif</div>
+    <div class="cap">(наименование объекта)</div>
+    <h1>СМЕТНЫЙ РАСЧЁТ</h1>
+    <div class="obj">{{ collect($r['sections'])->flatMap(fn ($s) => collect($s['lines'])->pluck('group'))->filter()->unique()->implode('; ') ?: 'Отделочные работы' }}</div>
+    <div class="cap">(наименование работ и затрат) · {{ $title }}</div>
+</div>
 
 <table>
     <thead>
@@ -48,4 +67,12 @@
     <tr><td><b>ВСЕГО, руб.</b></td><td class="num"><b>{{ $fmt($r['total']) }}</b></td></tr>
     <tr><td>в т.ч. НДС {{ rtrim(rtrim(number_format((float) $r['vat_rate'] * 100, 2, ',', ''), '0'), ',') }}%</td><td class="num">{{ $fmt($r['vat']) }}</td></tr>
 </table>
-<p class="muted">Стоимость работ включает накладные расходы, сметную прибыль, затарку, разгрузку и подъём материала.</p>
+<p><b>Примечание:</b></p>
+@foreach (config('crm.notes') as $i => $note)
+    <p class="note">{{ $i + 1 }}. {{ $note }}</p>
+@endforeach
+
+<table class="sign" style="margin-top:8mm"><tr>
+    <td style="width:50%">Составил ___________________________</td>
+    <td>Проверил ___________________________</td>
+</tr></table>

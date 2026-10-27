@@ -107,13 +107,36 @@ class RoomForm extends Component
         return is_numeric($v) ? (float) $v : null;
     }
 
-    public function save()
+    /** Сохранить и сразу открыть новое помещение — квартиру замеряют комнатами подряд */
+    public function saveAndNext()
+    {
+        return $this->save(next: true);
+    }
+
+    /** Работы, у которых база для расчёта (стены, пол…) у этого замера нулевая */
+    protected function zeroAreaWorks(): array
+    {
+        $g = $this->geometry();
+        $types = Catalog::workTypes();
+
+        return collect($this->works)
+            ->filter(fn ($w, $code) => ! empty($w['on']) && isset($types[$code]) && (float) ($g[$types[$code]['basis']] ?? 0) <= 0)
+            ->keys()->map(fn ($code) => $types[$code]['short'] ?? $types[$code]['name'])->all();
+    }
+
+    public function save(bool $next = false)
     {
         $this->validate([
             'name' => 'required|string|max:255',
             'height' => 'required',
             'section' => 'required|string|max:255',
         ], [], ['name' => 'название', 'height' => 'высота', 'section' => 'раздел сметы']);
+
+        // помещение с нулевой площадью молча ушло бы в смету нулём
+        if ($zero = $this->zeroAreaWorks()) {
+            $this->addError('area', 'Площадь для работ «' . implode('», «', $zero) . '» получается нулевой — проверьте размеры и высоту.');
+            return null;
+        }
 
         $data = [
             'name' => $this->name, 'section' => $this->section, 'kind' => $this->kind, 'shape' => $this->shape,
@@ -135,9 +158,11 @@ class RoomForm extends Component
             }
         }
 
-        session()->flash('status', "Помещение «{$room->name}» сохранено");
+        session()->flash('status', "Помещение «{$room->name}» сохранено" . ($next ? ' — заводим следующее' : ''));
 
-        return $this->redirectRoute('objects.show', $this->object);
+        return $next
+            ? $this->redirectRoute('rooms.create', $this->object)
+            : $this->redirectRoute('objects.show', $this->object);
     }
 
     private function geometryOpenings(): array
@@ -152,6 +177,7 @@ class RoomForm extends Component
     {
         return view('livewire.room-form', [
             'g' => $this->geometry(),
+            'zeroArea' => $this->zeroAreaWorks(),
             'room' => $this->roomId ? Room::find($this->roomId) : null,
             // без цен — скрыты, кроме уже выбранных в этом помещении
             'workTypes' => array_filter(Catalog::workTypes(), fn ($wt, $code) => isset(Catalog::activeWorkTypes()[$code]) || ! empty($this->works[$code]['on']), ARRAY_FILTER_USE_BOTH),

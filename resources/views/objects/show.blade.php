@@ -60,9 +60,19 @@
                             </td>
                         </tr>
                     @endforeach
-                    @if ($rooms->isEmpty())
+                    @if ($rooms->isEmpty() && $object->lines->isNotEmpty())
                         <tr><td colspan="9" class="text-secondary">
-                            Помещений нет@if ($object->lines->isNotEmpty()) — смета этого объекта собрана по готовым объёмам ({{ $object->lines->count() }} поз.), см. вкладку «Смета»@endif.
+                            Помещений нет — смета этого объекта собрана по объёмам без замера ({{ $object->lines->count() }} поз.), см. вкладку «Смета».
+                        </td></tr>
+                    @elseif ($rooms->isEmpty())
+                        <tr><td colspan="9">
+                            <div class="crm-steps">
+                                <div class="crm-steps__item"><b>1</b><div><strong>Добавьте помещение</strong><span>Название, размеры, высота, двери и окна — площади посчитаются сами.</span></div></div>
+                                <div class="crm-steps__item"><b>2</b><div><strong>Отметьте виды работ</strong><span>Галочки внизу окна помещения: например, гипсовая штукатурка.</span></div></div>
+                                <div class="crm-steps__item"><b>3</b><div><strong>Откройте вкладку «Смета»</strong><span>Материалы и стоимость посчитаются по нормам, скачайте Excel или PDF.</span></div></div>
+                            </div>
+                            <a class="btn btn-accent mt-3" href="{{ route('rooms.create', $object) }}">Добавить первое помещение</a>
+                            <span class="crm-muted ms-3">Замеров нет, но площадь известна из проекта? Добавьте её на вкладке «Смета» как объём без замера.</span>
                         </td></tr>
                     @endif
                     </tbody>

@@ -50,6 +50,7 @@ final class ObjectSummary
         return [
             'estimate' => $estimate,
             'rooms' => $rooms->count(),
+            'lines' => $object->lines()->count(),
             'measured' => $measured,
             'measured_percent' => $rooms->count() ? (int) round($measured / $rooms->count() * 100) : 0,
             'buildings' => $rooms->pluck('building')->filter()->unique()->count(),

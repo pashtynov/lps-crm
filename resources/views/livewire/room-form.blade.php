@@ -42,6 +42,9 @@
                                     <p class="row"><span class="col">Пол + порог (стяжка)</span><span class="col-auto">{{ $fmt($g['floor_threshold'], 3) }}</span></p>
                                     <p class="row"><span class="col">Периметр без дверей</span><span class="col-auto">{{ $fmt($g['perimeter_net']) }}</span></p>
                                     @if ($shape === 'l')<p class="crm-hint">B = F − D, E = A − C, периметр всегда 2·(A + F)</p>@endif
+                                    @if ($zeroArea)
+                                        <div class="crm-warning mt-2">Нулевая площадь для: {{ implode(', ', $zeroArea) }}. Введите размеры и высоту.</div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -172,7 +175,9 @@
         </div>
         <div class="sCreateObject__footer">
             <div class="sCreateObject__footer-row">
-                <button type="submit" class="sCreateObject__btn btn btn-accent">Сохранить изменения</button>
+                @error('area')<div class="crm-error w-100 mb-2">{{ $message }}</div>@enderror
+                <button type="submit" class="sCreateObject__btn btn btn-accent">Сохранить</button>
+                <button type="button" class="sCreateObject__btn btn btn-light" wire:click="saveAndNext" title="Сохранить и сразу завести следующее помещение той же квартиры">Сохранить и следующее</button>
                 <a class="sCreateObject__btn btn btn-light" href="{{ route('objects.show', $object) }}">Отмена</a>
             </div>
         </div>

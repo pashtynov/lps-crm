@@ -32,7 +32,7 @@ it('открывает объект, форму помещения и справ
     $this->get("/objects/{$object->id}/rooms/new")->assertOk();
     $this->get('/catalog')->assertOk()->assertSee('Бетоноконтакт');
     $this->get("/objects/{$object->id}/edit")->assertOk()->assertSee('Редактирование объекта');
-    $this->get("/objects/{$object->id}/estimate")->assertOk()->assertSee('Доля в смете');
+    $this->get("/objects/{$object->id}/estimate")->assertOk()->assertSee('Сметная стоимость с НДС');
 });
 
 it('прячет работы без цен и объясняет объёмы без замера', function () {
@@ -45,7 +45,7 @@ it('прячет работы без цен и объясняет объёмы �
         ->assertDontSee('Полусухая стяжка')->assertSee('Гипс. штукатурка')->assertSee('Дополнительно');
     $this->get("/objects/{$flat->id}/estimate")->assertOk()
         ->assertSee('+ Объём без замера')->assertDontSee('Нет цены работы');
-    // у объекта без помещений объёмы раскрыты сразу
-    $this->get("/objects/{$betancura->id}/estimate")->assertOk()->assertSee('Скрыть')->assertSee('Гипс. штукатурка');
+    // объёмы есть — блок свёрнут, но их число видно на кнопке
+    $this->get("/objects/{$betancura->id}/estimate")->assertOk()->assertSee('Объём без замера')->assertSee('(6)')->assertDontSee('Скрыть');
     $this->get("/objects/{$flat->id}")->assertSee('замерено<br>помещений', false);
 });

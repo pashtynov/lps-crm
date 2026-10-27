@@ -6,7 +6,6 @@ use App\Calc\Catalog;
 use App\Calc\ObjectEstimate;
 use App\Models\CrmObject;
 use App\Models\Estimate;
-use App\Support\ObjectSummary;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -35,8 +34,8 @@ class EstimateView extends Component
         $this->object = $object;
         $this->vatPercent = round((float) $object->vat_rate * 100, 2);
         $this->newWorkType = array_key_first(Catalog::activeWorkTypes());
-        // у объекта без помещений смета держится на объёмах — показываем их сразу
-        $this->showLineForm = $object->rooms()->doesntExist();
+        // у совсем пустого объекта сразу показываем, как добавить объём без замера
+        $this->showLineForm = $object->rooms()->doesntExist() && $object->lines()->doesntExist();
         $this->newSection = $object->lines()->reorder('position', 'desc')->value('section')
             ?? $object->rooms()->reorder('id', 'desc')->value('section') ?? $this->newSection;
         foreach ($object->extras()->where('extra', 'waste_container')->get() as $e) {
@@ -104,7 +103,6 @@ class EstimateView extends Component
         return view('livewire.estimate-view', [
             'result' => $result,
             'object' => $object,
-            'sum' => ObjectSummary::for($object, $result),
             'workTypes' => Catalog::workTypes(),
             'activeWorkTypes' => Catalog::activeWorkTypes(),
             'lines' => $object->lines()->get(),

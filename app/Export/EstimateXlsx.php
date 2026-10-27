@@ -21,6 +21,7 @@ final class EstimateXlsx
         $sh->setTitle('Смета');
         $money = '#,##0.00';
 
+        $sh->setCellValue('F1', 'Приложение № 1 к договору подряда № ____ от «__» ________ 20__ г.');
         $sh->setCellValue('B1', $objectName);
         $sh->setCellValue('B2', 'СМЕТНЫЙ РАСЧЕТ');
         $sh->setCellValue('B3', $title);
@@ -97,8 +98,14 @@ final class EstimateXlsx
         $sh->setCellValue("G$row", "=ROUND(G$vsego/" . self::num((string) (1 + $rate)) . '*' . self::num((string) $rate) . ',2)');
         $sh->getStyle("B$itogo:H$row")->getFont()->setBold(true);
         $row += 2;
-        $sh->setCellValue("B$row", 'Примечание: стоимость работ включает накладные расходы, сметную прибыль, затарку, разгрузку и подъём материала.');
-
+        $sh->setCellValue("B$row", 'Примечание:');
+        $sh->getStyle("B$row")->getFont()->setBold(true);
+        foreach (config('crm.notes', []) as $i => $note) {
+            $sh->setCellValue('B' . (++$row), ($i + 1) . '. ' . $note);
+        }
+        $row += 2;
+        $sh->setCellValue("B$row", 'Составил ___________________________');
+        $sh->setCellValue('B' . ($row + 2), 'Проверил ___________________________');
         $sh->getStyle("D7:H$row")->getNumberFormat()->setFormatCode($money);
         $sh->getStyle('A5:H' . ($vsego + 1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
         foreach (['A' => 6, 'B' => 70, 'C' => 8, 'D' => 12, 'E' => 12, 'F' => 12, 'G' => 16, 'H' => 16] as $col => $width) {

@@ -75,7 +75,7 @@
                                 <div class="details-with-toggle__col col-md-3 col-xl"><div class="details-with-toggle__item"><p>{{ $sum['apartments'] }} кв</p></div></div>
                                 <div class="details-with-toggle__col col-md-3 col-xl"><div class="details-with-toggle__item"><p>{{ $sum['rooms'] }} пом</p></div></div>
                                 @else
-                                    <div class="details-with-toggle__col col-md-6 col-xl-auto"><div class="details-with-toggle__item"><p>смета по готовым объёмам</p></div></div>
+                                    <div class="details-with-toggle__col col-md-6 col-xl-auto"><div class="details-with-toggle__item"><p>{{ $sum['lines'] ? 'смета по объёмам без замера' : 'помещений пока нет' }}</p></div></div>
                                 @endif
                                 <div class="details-with-toggle__col col-md-3 col-xl"><div class="details-with-toggle__item"><p>S {{ $fmt($e['area']) }} м²</p></div></div>
                             </div>

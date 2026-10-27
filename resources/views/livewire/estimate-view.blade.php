@@ -2,7 +2,7 @@
     $fmt = fn ($v, $d = 2) => $v === null ? '—' : number_format((float) $v, $d, ',', ' ');
 @endphp
 <div>
-    @include('objects._hero', ['sum' => $sum])
+    @include('objects._head', ['crumb' => 'Смета'])
 
     <div class="sMainInfo section" id="sMainInfo">
         <div class="container-fluid">

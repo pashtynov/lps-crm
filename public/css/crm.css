@@ -106,3 +106,13 @@ a.close-btn { display: flex; color: inherit; }
 .crm-volumes__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .crm-volumes__head > div { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
 .circular-progress-bar .number p { line-height: 1.2; }
+.crm-avatar-btn { border: none; cursor: pointer; padding: 0; }
+.crm-avatar-btn:hover::after { content: "Выйти"; position: absolute; left: 110%; top: 50%; transform: translateY(-50%); background: #2a3137; color: #fff; font-size: 12px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.crm-avatar-btn { position: relative; overflow: visible !important; }
+.crm-steps { display: flex; gap: 16px; flex-wrap: wrap; padding: 8px 0; }
+.crm-steps__item { flex: 1 1 220px; display: flex; gap: 12px; align-items: flex-start; background: #f8f9fa; border-radius: 10px; padding: 14px; }
+.crm-steps__item b { flex: 0 0 32px; height: 32px; border-radius: 50%; background: #f4b13e; color: #2a3137; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.crm-steps__item div { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.crm-steps__item span { color: #8b9298; font-size: 13px; line-height: 1.35; }
+.page-head__col--title:has(.crm-muted) { flex-wrap: wrap; }
+.page-head__col--title .crm-muted { flex-basis: 100%; width: 100%; margin-top: 4px; }
