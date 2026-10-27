@@ -22,6 +22,18 @@ final class Catalog
         return array_column(self::all()['work_types'], null, 'code');
     }
 
+    /**
+     * Виды работ, которые можно выбирать: есть цена работы и цены всех материалов.
+     * Без цен позиция ушла бы в смету по нулю — до получения цен клиента прячем её из списков.
+     */
+    public static function activeWorkTypes(): array
+    {
+        $materials = self::materials();
+
+        return array_filter(self::workTypes(), fn ($wt) => $wt['price'] !== null
+            && collect($wt['materials'])->every(fn ($m) => ($materials[$m['material']]['price'] ?? null) !== null));
+    }
+
     public static function materials(): array
     {
         return array_column(self::all()['materials'], null, 'code');

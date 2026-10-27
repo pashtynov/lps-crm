@@ -153,7 +153,8 @@ class RoomForm extends Component
         return view('livewire.room-form', [
             'g' => $this->geometry(),
             'room' => $this->roomId ? Room::find($this->roomId) : null,
-            'workTypes' => Catalog::workTypes(),
+            // без цен — скрыты, кроме уже выбранных в этом помещении
+            'workTypes' => array_filter(Catalog::workTypes(), fn ($wt, $code) => isset(Catalog::activeWorkTypes()[$code]) || ! empty($this->works[$code]['on']), ARRAY_FILTER_USE_BOTH),
             'sections' => $this->object->rooms()->reorder()->distinct()->pluck('section')
                 ->merge($this->object->lines()->reorder()->distinct()->pluck('section'))->unique()->values(),
         ])->title(($this->roomId ? 'Помещение' : 'Новое помещение') . ' — ' . $this->object->name);

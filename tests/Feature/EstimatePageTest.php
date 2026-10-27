@@ -34,3 +34,18 @@ it('открывает объект, форму помещения и справ
     $this->get("/objects/{$object->id}/edit")->assertOk()->assertSee('Редактирование объекта');
     $this->get("/objects/{$object->id}/estimate")->assertOk()->assertSee('Доля в смете');
 });
+
+it('прячет работы без цен и объясняет объёмы без замера', function () {
+    $this->seed(DatabaseSeeder::class);
+    $this->actingAs(User::factory()->create());
+    $flat = CrmObject::where('name', 'like', 'Демо%')->firstOrFail();
+    $betancura = CrmObject::where('name', 'like', 'Бетанкура%')->firstOrFail();
+
+    $this->get("/objects/{$flat->id}/rooms/new")->assertOk()
+        ->assertDontSee('Полусухая стяжка')->assertSee('Гипс. штукатурка')->assertSee('Дополнительно');
+    $this->get("/objects/{$flat->id}/estimate")->assertOk()
+        ->assertSee('+ Объём без замера')->assertDontSee('Нет цены работы');
+    // у объекта без помещений объёмы раскрыты сразу
+    $this->get("/objects/{$betancura->id}/estimate")->assertOk()->assertSee('Скрыть')->assertSee('Гипс. штукатурка');
+    $this->get("/objects/{$flat->id}")->assertSee('замерено<br>помещений', false);
+});

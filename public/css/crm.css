@@ -101,3 +101,8 @@ a.close-btn { display: flex; color: inherit; }
 .crm-panel .crm-estimate { margin: 0 -24px; }
 .crm-estimate-bar__actions .btn { display: inline-flex; align-items: center; gap: 6px; }
 .sMainInfo .crm-card { box-shadow: none; }
+.crm-more summary { cursor: pointer; color: #467cf4; font-size: 14px; }
+.crm-volumes { border: 1px dashed #d5dade; border-radius: 10px; padding: 14px 16px; margin: 0 0 16px; }
+.crm-volumes__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.crm-volumes__head > div { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.circular-progress-bar .number p { line-height: 1.2; }

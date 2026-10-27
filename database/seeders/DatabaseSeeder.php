@@ -65,7 +65,6 @@ class DatabaseSeeder extends Seeder
         foreach ($rooms as $r) {
             $room = $o->rooms()->create($place + $r);
             $room->works()->create(['work_type' => 'plaster_gypsum_brick', 'params' => []]);
-            $room->works()->create(['work_type' => 'screed_semidry', 'params' => ['thickness' => 60]]);
         }
         $o->extras()->create(['section' => 'Отделка квартиры', 'extra' => 'waste_container', 'qty' => 1]);
     }

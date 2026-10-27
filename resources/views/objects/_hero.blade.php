@@ -51,12 +51,12 @@
             </div>
             <div class="sPageInfo__body-row row">
                 <div class="col-md">
-                    <div class="circular-progress-bar" style="--percent: {{ $sum['measured_percent'] }}; --bgColor: #467CF4;">
+                    <div class="circular-progress-bar" title="{{ $sum['measured'] }} из {{ $sum['rooms'] }} помещений с размерами. Это не готовность работ — её учёт появится на следующем этапе." style="--percent: {{ $sum['measured_percent'] }}; --bgColor: #467CF4;">
                         <div class="percent">
                             <svg viewBox="0 0 216 216" xmlns="http://www.w3.org/2000/svg"><circle cx="108" cy="108" r="84"></circle><circle cx="108" cy="108" r="84"></circle></svg>
                             <div class="number">
                                 <h2>{{ $sum['rooms'] ? $sum['measured_percent'] . '%' : '—' }}</h2>
-                                <p>{{ $sum['rooms'] ? 'Замерено' : 'Без замеров' }}</p>
+                                <p>{!! $sum['rooms'] ? 'замерено<br>помещений' : 'замеров<br>нет' !!}</p>
                             </div>
                         </div>
                     </div>

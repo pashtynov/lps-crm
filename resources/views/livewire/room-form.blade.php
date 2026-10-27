@@ -131,21 +131,25 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="sCreateObject__item">
-                            <p>Раздел сметы</p>
-                            <input class="form-control" wire:model="section" list="sections">
-                            <datalist id="sections">
-                                @foreach ($sections as $s)<option value="{{ $s }}">@endforeach
-                                <option value="Отделка помещений ниже отм. 0,000"><option value="Отделка помещений выше отм. 0,000">
-                            </datalist>
-                            @error('section')<div class="crm-error">{{ $message }}</div>@enderror
-                        </div>
-                    </div>
                     <div class="col-6"><div class="sCreateObject__item"><p>Дом</p><input class="form-control" wire:model="building"></div></div>
                     <div class="col-6"><div class="sCreateObject__item"><p>Подъезд</p><input class="form-control" wire:model="entrance"></div></div>
                     <div class="col-6"><div class="sCreateObject__item"><p>Этаж</p><input class="form-control" wire:model="floor"></div></div>
                     <div class="col-6"><div class="sCreateObject__item"><p>Квартира</p><input class="form-control" wire:model="apartment"></div></div>
+                    <div class="col-12">
+                        <details class="crm-more" @if ($errors->has('section')) open @endif>
+                            <summary>Дополнительно</summary>
+                            <div class="sCreateObject__item mt-2">
+                                <p>Раздел сметы</p>
+                                <input class="form-control" wire:model="section" list="sections">
+                                <datalist id="sections">
+                                    @foreach ($sections as $s)<option value="{{ $s }}">@endforeach
+                                    <option value="Отделка помещений ниже отм. 0,000"><option value="Отделка помещений выше отм. 0,000">
+                                </datalist>
+                                <div class="crm-hint">Заголовок группы в смете. Нужен, когда смету делят на части — например, подвал (ниже отм. 0,000) и этажи. Обычно не меняют: новое помещение берёт раздел предыдущего.</div>
+                                @error('section')<div class="crm-error">{{ $message }}</div>@enderror
+                            </div>
+                        </details>
+                    </div>
                     @if ($room)
                         <div class="col-12"><div class="sCreateObject__item"><p>Дата создания</p><span>{{ $room->created_at->format('d.m.Y, H:i') }}</span></div></div>
                         <div class="col-12"><div class="sCreateObject__item"><p>Последнее изменение</p><span>{{ $room->updated_at->format('d.m.Y, H:i') }}</span></div></div>

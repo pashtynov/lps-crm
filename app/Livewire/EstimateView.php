@@ -28,11 +28,17 @@ class EstimateView extends Component
 
     public string $variantTitle = '';
 
+    public bool $showLineForm = false;
+
     public function mount(CrmObject $object): void
     {
         $this->object = $object;
         $this->vatPercent = round((float) $object->vat_rate * 100, 2);
-        $this->newWorkType = array_key_first(Catalog::workTypes());
+        $this->newWorkType = array_key_first(Catalog::activeWorkTypes());
+        // у объекта без помещений смета держится на объёмах — показываем их сразу
+        $this->showLineForm = $object->rooms()->doesntExist();
+        $this->newSection = $object->lines()->reorder('position', 'desc')->value('section')
+            ?? $object->rooms()->reorder('id', 'desc')->value('section') ?? $this->newSection;
         foreach ($object->extras()->where('extra', 'waste_container')->get() as $e) {
             $this->waste[md5($e->section)] = (float) $e->qty;
         }
@@ -100,6 +106,7 @@ class EstimateView extends Component
             'object' => $object,
             'sum' => ObjectSummary::for($object, $result),
             'workTypes' => Catalog::workTypes(),
+            'activeWorkTypes' => Catalog::activeWorkTypes(),
             'lines' => $object->lines()->get(),
             'sections' => $sections->isEmpty() ? collect(['Основной раздел']) : $sections,
             'variants' => $object->estimates()->get(),

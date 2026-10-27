@@ -20,6 +20,39 @@
                 </div>
             </div>
 
+            <div class="crm-volumes">
+                <div class="crm-volumes__head">
+                    <div>
+                        <b>Смета считается из замеров помещений.</b>
+                        <span class="crm-muted">Если замеров нет, а площадь известна из проекта или ведомости — добавьте её как объём без замера.</span>
+                    </div>
+                    <button type="button" class="btn btn-light" wire:click="$toggle('showLineForm')">
+                        {{ $showLineForm ? 'Скрыть' : '+ Объём без замера' }}@if ($lines->isNotEmpty()) ({{ $lines->count() }})@endif
+                    </button>
+                </div>
+                @if ($showLineForm)
+                    @if ($lines->isNotEmpty())
+                        <table class="crm-table mt-3">
+                            <thead><tr><th>Раздел</th><th>Работа</th><th class="num">Объём, м²</th><th></th></tr></thead>
+                            @foreach ($lines as $l)
+                                <tr wire:key="l-{{ $l->id }}"><td class="small">{{ $l->section }}</td><td class="small">{{ $workTypes[$l->work_type]['short'] ?? $l->work_type }}</td>
+                                    <td class="num">{{ $fmt($l->qty) }}</td>
+                                    <td><button class="btn btn-light btn-sm" wire:click="removeLine({{ $l->id }})" wire:confirm="Убрать позицию?">✕</button></td></tr>
+                            @endforeach
+                        </table>
+                    @endif
+                    <form wire:submit="addLine" class="row g-2 mt-2">
+                        <div class="col-md-5"><select class="form-select" wire:model="newWorkType">
+                                @foreach ($activeWorkTypes as $code => $wt)<option value="{{ $code }}">{{ $wt['short'] }}</option>@endforeach</select></div>
+                        <div class="col-md-2"><input class="form-control" inputmode="decimal" wire:model="newQty" placeholder="м²">
+                            @error('newQty')<div class="crm-error">{{ $message }}</div>@enderror</div>
+                        <div class="col-md-4"><input class="form-control" wire:model="newSection" list="est-sections" placeholder="Раздел сметы" title="Заголовок группы в смете">
+                            <datalist id="est-sections">@foreach ($sections as $s)<option value="{{ $s }}">@endforeach</datalist></div>
+                        <div class="col-md-1"><button class="btn btn-accent w-100">Добавить</button></div>
+                    </form>
+                @endif
+            </div>
+
             @php
                 $missing = collect($result['warnings'])->groupBy(fn ($w) => \Illuminate\Support\Str::before($w, ':'))
                     ->map(fn ($g) => $g->map(fn ($w) => trim(\Illuminate\Support\Str::after($w, ':'))));
@@ -76,30 +109,6 @@
 
             <div class="row g-4 mt-1">
                 <div class="col-lg-7">
-                    <div class="crm-card">
-                        <h3>Позиции с готовым объёмом</h3>
-                        <p class="text-secondary small">Когда замеров нет, а объём известен из проекта или ведомости. Площади из замеров помещений добавляются в смету сами.</p>
-                        @if ($lines->isNotEmpty())
-                            <table class="crm-table">
-                                @foreach ($lines as $l)
-                                    <tr wire:key="l-{{ $l->id }}"><td class="small">{{ $l->section }}</td><td class="small">{{ $workTypes[$l->work_type]['name'] ?? $l->work_type }}</td>
-                                        <td class="num">{{ $fmt($l->qty) }}</td>
-                                        <td><button class="btn btn-light btn-sm" wire:click="removeLine({{ $l->id }})" wire:confirm="Убрать позицию?">✕</button></td></tr>
-                                @endforeach
-                            </table>
-                        @endif
-                        <form wire:submit="addLine" class="row g-2">
-                            <div class="col-md-4"><input class="form-control" wire:model="newSection" list="est-sections" placeholder="Раздел">
-                                <datalist id="est-sections">@foreach ($sections as $s)<option value="{{ $s }}">@endforeach</datalist></div>
-                            <div class="col-md-5"><select class="form-select" wire:model="newWorkType">
-                                    @foreach ($workTypes as $code => $wt)<option value="{{ $code }}">{{ $wt['name'] }}</option>@endforeach</select></div>
-                            <div class="col-md-2"><input class="form-control" inputmode="decimal" wire:model="newQty" placeholder="м²">
-                                @error('newQty')<div class="crm-error">{{ $message }}</div>@enderror</div>
-                            <div class="col-md-1"><button class="btn btn-accent w-100">+</button></div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-lg-5">
                     <div class="crm-card">
                         <h3>Варианты</h3>
                         <form wire:submit="saveVariant" class="d-flex gap-2 mb-3">
