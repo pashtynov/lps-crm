@@ -8,12 +8,13 @@
         <div class="container-fluid">
             @include('objects._tabs', ['active' => 'estimate'])
 
-            <div class="crm-panel">
+            <div class="crm-panel" wire:loading.class="crm-busy">
+            <div class="crm-recalc" wire:loading>Пересчитываю…</div>
             <div class="crm-estimate-bar">
-                <div><span class="crm-label">Сметная стоимость с НДС</span><b class="crm-big">{{ $fmt($result['total']) }} ₽</b></div>
+                <div><span class="crm-label">Сметная стоимость с НДС</span><b class="crm-big" data-flash="total">{{ $fmt($result['total']) }} ₽</b></div>
                 <div><span class="crm-label">в т.ч. НДС, %</span>
                     <input class="form-control form-control-sm crm-vat" inputmode="decimal" wire:model.live.debounce.600ms="vatPercent">
-                    <span class="crm-muted">{{ $fmt($result['vat']) }} ₽</span></div>
+                    <span class="crm-muted" data-flash="vat">{{ $fmt($result['vat']) }} ₽</span></div>
                 <div class="crm-estimate-bar__actions">
                     <a class="btn btn-light" href="{{ route('estimate.xlsx', $object) }}"><svg class="icon icon-file"><use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#file"></use></svg> Excel</a>
                     <a class="btn btn-light" target="_blank" href="{{ route('estimate.pdf', $object) }}"><svg class="icon icon-file"><use xlink:href="{{ asset('verstka/img/svg/sprite.svg') }}#file"></use></svg> PDF</a>
@@ -66,6 +67,14 @@
                 </div>
             @endif
 
+            <div class="crm-price-hint">
+                <span>Цены в смете можно менять прямо в таблице — только для этого объекта, справочник не меняется.</span>
+                @if ($overrides)
+                    <span class="crm-price-hint__changed">Изменено цен: {{ count($overrides) }}</span>
+                    <button type="button" class="btn btn-light btn-sm" wire:click="resetPrices" wire:confirm="Вернуть все цены этого объекта к справочнику?">Вернуть цены справочника</button>
+                @endif
+            </div>
+
             <div class="main-table crm-estimate">
                 <table>
                     <thead>
@@ -81,8 +90,8 @@
                         @foreach ($s['lines'] as $l)
                             <tr class="crm-work-row">
                                 <td>{{ ++$n }}</td><td>{{ $l['name'] }}</td><td>{{ $l['unit'] === 'м2' ? 'м²' : $l['unit'] }}</td>
-                                <td class="num">{{ $fmt($l['qty']) }}</td><td class="num">{{ $fmt($l['price']) }}</td><td></td>
-                                <td class="num">{{ $fmt($l['work_sum']) }}</td><td></td>
+                                <td class="num">{{ $fmt($l['qty']) }}</td><td class="num crm-price-cell"><input class="crm-price {{ isset($overrides['work__' . $l['code']]) ? 'changed' : '' }}" inputmode="decimal" wire:model.live.debounce.700ms="prices.{{ 'work__' . $l['code'] }}" title="{{ isset($overrides['work__' . $l['code']]) ? 'Изменено для этого объекта. В справочнике: ' . ($base['work__' . $l['code']] ?? 'нет цены') : 'Цена из справочника — можно поменять для этого объекта' }}"></td><td></td>
+                                <td class="num" data-flash="ws-{{ $loop->parent->index }}-{{ $loop->index }}">{{ $fmt($l['work_sum']) }}</td><td></td>
                             </tr>
                             @foreach ($l['materials'] as $m)
                                 <tr class="crm-mat-row">
@@ -90,17 +99,17 @@
                                         @if ($m['packs'])<span class="text-secondary"> · {{ $fmt($m['packs'], 0) }} {{ $m['pack_name'] }}</span>@endif</td>
                                     <td>{{ $m['unit'] === 'м2' ? 'м²' : $m['unit'] }}</td>
                                     <td class="num" title="точно {{ $fmt($m['exact'], 3) }}">{{ $fmt($m['qty'], $m['qty'] == floor((float) $m['qty']) ? 0 : 1) }}</td>
-                                    <td></td><td class="num">{{ $fmt($m['price']) }}</td><td></td><td class="num">{{ $fmt($m['sum']) }}</td>
+                                    <td></td><td class="num crm-price-cell"><input class="crm-price {{ isset($overrides['material__' . $m['code']]) ? 'changed' : '' }}" inputmode="decimal" wire:model.live.debounce.700ms="prices.{{ 'material__' . $m['code'] }}" title="{{ isset($overrides['material__' . $m['code']]) ? 'Изменено для этого объекта. В справочнике: ' . ($base['material__' . $m['code']] ?? 'нет цены') : 'Цена из справочника — можно поменять для этого объекта' }}"></td><td></td><td class="num" data-flash="ms-{{ $loop->parent->parent->index }}-{{ $loop->parent->index }}-{{ $loop->index }}">{{ $fmt($m['sum']) }}</td>
                                 </tr>
                             @endforeach
                         @endforeach
                         @foreach ($s['extras'] as $e)
                             <tr class="crm-work-row"><td>{{ ++$n }}</td><td>{{ $e['name'] }}</td><td>{{ $e['unit'] }}</td>
-                                <td class="num">{{ $fmt($e['qty'], 0) }}</td><td class="num">{{ $fmt($e['price']) }}</td><td></td>
+                                <td class="num">{{ $fmt($e['qty'], 0) }}</td><td class="num crm-price-cell"><input class="crm-price {{ isset($overrides['extra__' . $e['code']]) ? 'changed' : '' }}" inputmode="decimal" wire:model.live.debounce.700ms="prices.{{ 'extra__' . $e['code'] }}" title="{{ isset($overrides['extra__' . $e['code']]) ? 'Изменено для этого объекта. В справочнике: ' . ($base['extra__' . $e['code']] ?? 'нет цены') : 'Цена из справочника — можно поменять для этого объекта' }}"></td><td></td>
                                 <td class="num">{{ $fmt($e['sum']) }}</td><td></td></tr>
                         @endforeach
                         <tr class="crm-subtotal"><td></td><td colspan="5">Итого: {{ $s['name'] }}</td>
-                            <td class="num">{{ $fmt($s['work']) }}</td><td class="num">{{ $fmt($s['materials']) }}</td></tr>
+                            <td class="num" data-flash="sw-{{ $loop->index }}">{{ $fmt($s['work']) }}</td><td class="num" data-flash="sm-{{ $loop->index }}">{{ $fmt($s['materials']) }}</td></tr>
                     @endforeach
                     </tbody>
                 </table>

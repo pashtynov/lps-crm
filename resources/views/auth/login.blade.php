@@ -4,7 +4,7 @@
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
     <title>Вход — CRM Лидерпрофстрой</title>
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=13">
+    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=15">
 </head>
 <body class="crm-login">
 <form method="post" action="{{ url('/login') }}" class="crm-card crm-login__card">

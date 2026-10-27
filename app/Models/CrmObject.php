@@ -36,6 +36,11 @@ class CrmObject extends Model
         return $this->hasMany(ObjectExtra::class, 'object_id');
     }
 
+    public function prices(): HasMany
+    {
+        return $this->hasMany(ObjectPrice::class, 'object_id');
+    }
+
     public function estimates(): HasMany
     {
         return $this->hasMany(Estimate::class, 'object_id')->latest();

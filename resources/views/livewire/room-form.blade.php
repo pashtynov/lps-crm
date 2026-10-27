@@ -33,14 +33,14 @@
                                             <text x="80" y="100" style="font-size:13px">S и P</text></svg>
                                     @endif
                                 </div>
-                                <div class="plan-block__info">
-                                    <p class="row"><span class="col">Площадь пола</span><span class="col-auto">{{ $fmt($g['floor']) }}</span></p>
-                                    <p class="row"><span class="col">Площадь стен</span><span class="col-auto">{{ $fmt($g['walls']) }}</span></p>
-                                    <p class="row"><span class="col">Площадь потолка</span><span class="col-auto">{{ $fmt($g['ceiling']) }}</span></p>
-                                    <p class="row"><span class="col">Периметр</span><span class="col-auto">{{ $fmt($g['perimeter']) }}</span></p>
-                                    <p class="row"><span class="col">Проёмы</span><span class="col-auto">{{ $fmt($g['openings_area']) }}</span></p>
-                                    <p class="row"><span class="col">Пол + порог (стяжка)</span><span class="col-auto">{{ $fmt($g['floor_threshold'], 3) }}</span></p>
-                                    <p class="row"><span class="col">Периметр без дверей</span><span class="col-auto">{{ $fmt($g['perimeter_net']) }}</span></p>
+                                <div class="plan-block__info" wire:loading.class="crm-busy">
+                                    <p class="row"><span class="col">Площадь пола</span><span class="col-auto" data-flash="g-floor">{{ $fmt($g['floor']) }}</span></p>
+                                    <p class="row"><span class="col">Площадь стен</span><span class="col-auto" data-flash="g-walls">{{ $fmt($g['walls']) }}</span></p>
+                                    <p class="row"><span class="col">Площадь потолка</span><span class="col-auto" data-flash="g-ceiling">{{ $fmt($g['ceiling']) }}</span></p>
+                                    <p class="row"><span class="col">Периметр</span><span class="col-auto" data-flash="g-perimeter">{{ $fmt($g['perimeter']) }}</span></p>
+                                    <p class="row"><span class="col">Проёмы</span><span class="col-auto" data-flash="g-openings_area">{{ $fmt($g['openings_area']) }}</span></p>
+                                    <p class="row"><span class="col">Пол + порог (стяжка)</span><span class="col-auto" data-flash="g-floor_threshold">{{ $fmt($g['floor_threshold'], 3) }}</span></p>
+                                    <p class="row"><span class="col">Периметр без дверей</span><span class="col-auto" data-flash="g-perimeter_net">{{ $fmt($g['perimeter_net']) }}</span></p>
                                     @if ($shape === 'l')<p class="crm-hint">B = F − D, E = A − C, периметр всегда 2·(A + F)</p>@endif
                                     @if ($zeroArea)
                                         <div class="crm-warning mt-2">Нулевая площадь для: {{ implode(', ', $zeroArea) }}. Введите размеры и высоту.</div>

@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="{{ asset('verstka/img/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('verstka/libs/swiper/swiper-bundle.min.css') }}">
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=13">
+    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=15">
     @livewireStyles
 </head>
 <body class="{{ $bodyClass ?? 'room-page' }}">
@@ -27,5 +27,6 @@
     </div>
 </div>
 @livewireScripts
+<script src="{{ asset('js/crm.js') }}?v=1"></script>
 </body>
 </html>

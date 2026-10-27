@@ -55,8 +55,24 @@ final class ObjectEstimate
         return ['vat_rate' => (string) $object->vat_rate, 'sections' => array_values($sections)];
     }
 
+    /** Справочник с ценами, изменёнными для этого объекта (object_prices) */
+    public static function catalog(CrmObject $object): array
+    {
+        $catalog = Catalog::all();
+        foreach ($object->prices()->get() as $p) {
+            $list = \App\Models\ObjectPrice::KINDS[$p->kind] ?? null;
+            foreach ($catalog[$list] ?? [] as $i => $item) {
+                if ($item['code'] === $p->code) {
+                    $catalog[$list][$i]['price'] = (float) $p->price;
+                }
+            }
+        }
+
+        return $catalog;
+    }
+
     public static function calculate(CrmObject $object): array
     {
-        return (new Estimator(Catalog::all()))->estimate(self::spec($object));
+        return (new Estimator(self::catalog($object)))->estimate(self::spec($object));
     }
 }
