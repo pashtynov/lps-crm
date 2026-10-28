@@ -84,7 +84,7 @@
 
     function defaultObject() {
         return {
-            id: 'o' + Date.now().toString(36), name: 'ЖК «Солнечный»', address: 'Нижний Новгород', customer: '', created: null,
+            id: 'o' + Date.now().toString(36), name: 'ЖК «Солнечный»', address: 'Нижний Новгород', customer: '', inn: '', created: null,
             layouts: {
                 '1К-38': { code: '1К-38', rooms: [
                     { name: 'Комната', a: 4.3, b: 4.0, doors: 1, windows: 1 }, { name: 'Кухня', a: 3.5, b: 2.6, doors: 1, windows: 1 },

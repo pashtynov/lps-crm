@@ -5,7 +5,7 @@
 @section('content')
     @include('partials.page-head', ['heading' => 'Объекты', 'crumbs' => []])
 
-    <script src="{{ asset('js/concept-builder.js') }}?v=1"></script>
+    <script src="{{ asset('js/concept-builder.js') }}?v=2"></script>
     {{-- Карточки объектов — разметка макета index.html (sObject) --}}
     <div class="sObject section" id="sObject">
         <div class="container-fluid">

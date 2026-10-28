@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => 'Объект из мастера — концепт', 'bodyClass' => 'object-page'])
 
 @section('content')
-    <script src="{{ asset('js/concept-builder.js') }}?v=1"></script>
+    <script src="{{ asset('js/concept-builder.js') }}?v=2"></script>
 
     <div x-data="conceptBuilt(@js(route('objects.index')))">
         <template x-if="!obj">
@@ -24,7 +24,7 @@
                             <div class="page-head__col col-md-auto order-md-2"><span class="crm-concept-badge" title="Хранится в этом браузере, в базу CRM не пишется">концепт · создан в мастере</span></div>
                             <div class="page-head__col page-head__col--title col-lg order-md-4">
                                 <h1><span x-text="obj.name"></span> <span class="crm-status" style="--c:#9A52DF">Планирование</span></h1>
-                                <div class="crm-muted" x-text="[obj.address, obj.customer].filter(Boolean).join(' · ')"></div>
+                                <div class="crm-muted" x-text="[obj.address, obj.customer, obj.inn && 'ИНН ' + obj.inn].filter(Boolean).join(' · ')"></div>
                             </div>
                             <div class="col-12 d-none d-md-block m-0 p-0 order-md-3"></div>
                         </div>

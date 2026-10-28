@@ -4,7 +4,7 @@
     @include('concept._page', ['crumbs' => ['Новый объект — мастер' => route('concept.new')], 'title' => 'Новый объект',
         'subtitle' => 'Дом собирается из типовых планировок и схем подъездов — квартиры по одной вводить не нужно'])
 
-    <script src="{{ asset('js/concept-builder.js') }}?v=1"></script>
+    <script src="{{ asset('js/concept-builder.js') }}?v=2"></script>
 
     <div class="container-fluid" x-data="conceptWizard(@js(route('concept.built')))">
         <ol class="crm-steps-bar">
@@ -23,6 +23,10 @@
                         <div class="col-md-6"><label class="crm-label">Название</label><input class="form-control" x-model="obj.name"></div>
                         <div class="col-md-6"><label class="crm-label">Адрес</label><input class="form-control" x-model="obj.address"></div>
                         <div class="col-md-6"><label class="crm-label">Заказчик</label><input class="form-control" x-model="obj.customer" placeholder="Застройщик"></div>
+                        <div class="col-md-6"><label class="crm-label">ИНН заказчика</label>
+                            <input class="form-control" inputmode="numeric" maxlength="12" placeholder="10 цифр — компания, 12 — ИП"
+                                   x-model="obj.inn" @input="obj.inn = $event.target.value.replace(/\D/g, '')">
+                            <small class="crm-muted" x-show="obj.inn && ![10, 12].includes(obj.inn.length)" x-cloak>ИНН — 10 цифр у компании или 12 у ИП</small></div>
                     </div>
                     <p class="crm-muted mt-3">Дальше: какие планировки квартир есть в проекте, затем из них соберём дома и подъезды.</p>
                 </div>
@@ -139,7 +143,7 @@
                 <div x-show="step === 4">
                     <div class="crm-card">
                         <h3 x-text="obj.name"></h3>
-                        <p class="crm-muted" x-text="[obj.address, obj.customer].filter(Boolean).join(' · ')"></p>
+                        <p class="crm-muted" x-text="[obj.address, obj.customer, obj.inn && 'ИНН ' + obj.inn].filter(Boolean).join(' · ')"></p>
                         <div class="crm-legend">
                             <template x-for="code in layoutCodes()" :key="code">
                                 <span><i :style="`background:${color(code)}`"></i><span x-text="`${code} — ${ex().totals.byLayout[code] || 0} кв.`"></span></span>
