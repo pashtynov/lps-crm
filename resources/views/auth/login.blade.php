@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
     <title>Вход — CRM Лидерпрофстрой</title>
+    @include('partials.app-icons')
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=26">
 </head>

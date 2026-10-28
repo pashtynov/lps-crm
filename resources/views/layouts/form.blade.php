@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'CRM Лидерпрофстрой' }}</title>
     <link rel="shortcut icon" href="{{ asset('verstka/img/favicon.ico') }}">
+    @include('partials.app-icons')
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=26">
     @livewireStyles
