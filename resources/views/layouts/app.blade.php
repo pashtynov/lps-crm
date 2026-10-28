@@ -10,7 +10,7 @@
     @include('partials.app-icons')
     <link rel="stylesheet" href="{{ asset('verstka/libs/swiper/swiper-bundle.min.css') }}">
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=26">
+    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=32">
     @livewireStyles
 </head>
 <body class="{{ $bodyClass ?? 'room-page' }}">

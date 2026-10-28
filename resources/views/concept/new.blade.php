@@ -168,6 +168,7 @@
                 </div>
 
                 <div class="crm-wizard__nav">
+                    <span class="crm-wizard__mini" x-text="`${fmt(ex().totals.flats)} кв · ${fmt(ex().totals.mop)} МОП · ${fmt(ex().totals.walls)} м² стен`"></span>
                     <button type="button" class="btn btn-light" @click="prev()" x-show="step > 1">← Назад</button>
                     <button type="button" class="btn btn-accent" @click="next()" x-show="step < 4">Дальше →</button>
                     <button type="button" class="btn btn-accent" @click="create()" x-show="step === 4">Создать объект</button>

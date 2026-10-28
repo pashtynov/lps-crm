@@ -75,7 +75,7 @@
 
                 <h4 class="crm-h4">Проёмы</h4>
                 <table class="crm-table">
-                    <thead><tr><th>Тип</th><th>Что</th><th>Ширина, м</th><th>Высота, м</th><th>Площадь, м²</th><th></th></tr></thead>
+                    <thead><tr><th>Тип</th><th>Что</th><th>Ширина, м</th><th>Высота, м</th><th class="crm-col-area">Площадь, м²</th><th></th></tr></thead>
                     <tbody>
                     <template x-for="(o, k) in openings" :key="k">
                         <tr>
@@ -83,7 +83,7 @@
                             <td><input class="form-control form-control-sm" x-model="o.label"></td>
                             <td><input class="form-control form-control-sm" inputmode="decimal" x-model="o.width"></td>
                             <td><input class="form-control form-control-sm" inputmode="decimal" x-model="o.height"></td>
-                            <td x-text="fmt(num(o.width) * num(o.height))"></td>
+                            <td class="crm-col-area" x-text="fmt(num(o.width) * num(o.height))"></td>
                             <td><button type="button" class="btn btn-light btn-sm" @click="openings.splice(k, 1)" title="Убрать проём">✕</button></td>
                         </tr>
                     </template>

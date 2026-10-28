@@ -346,3 +346,69 @@ a.close-btn { display: flex; color: inherit; }
 .crm-dirty { font-size: 12px; font-weight: 500; color: #8a5a00; background: #fff3cd; border-radius: 6px; padding: 2px 8px; margin-left: 8px; vertical-align: middle; }
 .crm-saved { font-size: 12px; font-weight: 500; color: #0f5132; background: #d6f5e5; border-radius: 6px; padding: 2px 8px; margin-left: 8px; vertical-align: middle; }
 .crm-room-changed { font-size: 11px; color: #8a5a00; background: #fff3cd; border-radius: 6px; padding: 1px 6px; margin-left: 6px; }
+
+/* ===== Телефон: кнопки не уезжают за край и не прячутся под нижним меню ===== */
+.crm-wizard__main, .crm-wizard__side { min-width: 0; }
+.crm-sections { grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); }
+.crm-section-card { min-width: 0; }
+.crm-wizard__mini { display: none; margin-right: auto; font-size: 13px; color: #5d656b; align-self: center; }
+@media (max-width: 1199px) {
+    .crm-wizard__side { order: 2; }
+    /* шаги мастера: кнопки всегда под рукой, над нижним меню вёрстки */
+    .crm-wizard__nav { position: sticky; bottom: 0; z-index: 20; background: rgba(238, 238, 238, .96); backdrop-filter: blur(6px);
+        margin: 0 -16px; padding: 10px 16px; border-top: 1px solid #e3e6e9; }
+    .crm-wizard__mini { display: inline; }
+}
+@media (max-width: 991.98px) {
+    /* нижнее меню вёрстки фиксировано (48 px) — всё «прилипающее» поднимаем над ним */
+    body:not(.createObject-page) .crm-wizard__nav { bottom: 48px; }
+    body:not(.createObject-page) .crm-selbar { bottom: 60px; }
+    body:not(.createObject-page) .crm-toast { bottom: 120px; }
+    .crm-house__head { gap: 6px; } .crm-house__name { width: 100%; }
+    .crm-section-card__head { flex-wrap: wrap; }
+    .crm-range__floors { flex-wrap: wrap; }
+    .crm-layouts__edit .crm-table { display: block; overflow-x: auto; }
+    .crm-selbar { flex-direction: column; align-items: stretch; } .crm-selbar .form-select { width: 100%; }
+    .crm-estimate-bar { gap: 12px; } .crm-estimate-bar__actions { width: 100%; } .crm-estimate-bar__actions .btn { flex: 1; justify-content: center; }
+}
+@media (max-width: 575.98px) {
+    /* шахматка: этаж из 6 квартир помещается в ширину телефона */
+    .crm-cell { width: 42px; height: 38px; font-size: 12px; } .crm-cell small { font-size: 8px; }
+    .crm-chess-floor { width: 26px; } .crm-chess-row { gap: 3px; } .crm-chess { gap: 20px; }
+    .crm-drawer { padding: 24px 16px; } .crm-drawer__work { grid-template-columns: 1fr 1fr; } .crm-drawer__work > div { grid-column: 1 / -1; }
+    .crm-steps-bar li { padding: 6px 10px; font-size: 13px; }
+    .crm-kpis, .crm-kpis--built { grid-template-columns: 1fr 1fr; } .crm-kpi b { font-size: 18px; }
+    .crm-kpi--works { grid-column: 1 / -1; }
+    .crm-built-section { width: 100%; } .crm-copy-floor .form-control { width: 60px; }
+    .crm-tabs-row .toggle-block__btn { padding: 8px 12px; }
+}
+.crm-wizard__nav .btn { white-space: nowrap; }
+@media (max-width: 575.98px) { .crm-wizard__mini { font-size: 12px; line-height: 1.3; flex: 1 1 auto; min-width: 0; } .crm-wizard__nav { gap: 6px; } .crm-wizard__nav .btn { padding: 10px 14px; } }
+/* В вёрстке у .main-center-wrap overflow:hidden — из-за него не работает position:sticky (панели кнопок, выделения).
+   clip по горизонтали обрезает так же, но не создаёт прокручиваемую область */
+.main-center-wrap { overflow: visible !important; overflow-x: clip !important; }
+@media (max-width: 991.98px) {
+    .crm-selbar { flex-direction: row !important; flex-wrap: wrap; gap: 6px 8px; padding: 8px 12px; }
+    .crm-selbar > span:first-child { width: 100%; font-size: 13px; }
+    .crm-selbar .btn { padding: 6px 10px; font-size: 13px; }
+    .crm-selbar .form-select { width: auto !important; flex: 1 1 140px; font-size: 13px; }
+    .crm-selbar > span.d-flex { flex: 1 1 100%; }
+    .crm-legend { gap: 4px 10px; } .crm-legend span { white-space: nowrap; }
+}
+/* Окна редактирования на телефоне: фиксированный низ — сеткой, не столбиком на пол-экрана */
+@media (max-width: 767.98px) {
+    .createObject-page .sCreateObject { padding-bottom: 150px; }
+    .sCreateObject__footer { padding: 10px 12px !important; }
+    .sCreateObject__footer-row { display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 !important; }
+    .sCreateObject__footer-row > * { margin: 0 !important; }
+    .sCreateObject__footer-row > .btn-accent, .sCreateObject__footer-row > .crm-error { grid-column: 1 / -1; }
+    .sCreateObject__btn { --bs-btn-padding-y: .6rem !important; --bs-btn-padding-x: .5rem !important; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .crm-col-area { display: none; }
+    .createObject-page .crm-table td, .createObject-page .crm-table th { padding: 4px 3px; }
+    .createObject-page .crm-table .form-control-sm { min-width: 0; padding: 4px 6px; }
+    .createObject-page .crm-table select { min-width: 96px; }
+}
+/* transform в анимации окна делает его «рамкой» для position:fixed — и панель кнопок уезжала в конец страницы.
+   Окно появляется только прозрачностью */
+@keyframes crm-fade { from { opacity: 0; } to { opacity: 1; } }
+.createObject-page .sCreateObject { animation: crm-fade .25s ease-out both !important; transform: none !important; }
