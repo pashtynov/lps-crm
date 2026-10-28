@@ -28,7 +28,7 @@
             @if ($next)<a class="btn btn-light btn-sm" href="{{ route('concept.flat', [$house, $next['n']]) }}">кв. {{ $next['n'] }} →</a>@endif
         </div>
 
-        @if ($flat['problem'])<div class="crm-warning">⚠ {{ $flat['problem'] }} — отмечено прорабом, видно красным на шахматке.</div>@endif
+        @include('concept._problem', ['house' => $house, 'ns' => $flat['n'], 'hint' => 'Видно красным на шахматке, в сводке дома и подъезда и в задании прораба.'])
 
         <div class="crm-kpis crm-kpis--flat">
             <div class="crm-kpi"><span>Помещений</span><b>{{ count($rooms) }}</b><small>замер {{ $flat['measured'] ? 'есть' : 'не сделан — нет доступа' }}</small></div>

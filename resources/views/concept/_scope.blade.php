@@ -24,7 +24,7 @@
         <div><span>МОП</span><b>{{ $c['mop'] }}</b></div>
         <div><span>Помещений в квартирах</span><b>{{ $n($c['rooms']) }}</b></div>
         <div><span>Стены / пол</span><b>{{ $n($c['walls']) }} / {{ $n($c['floor_m2']) }} м²</b></div>
-        <div class="{{ $c['problems'] ? 'bad' : '' }}"><span>Проблемы</span><b>{{ $c['problems'] ?: 'нет' }}</b></div>
+        <div class="{{ $c['problems'] ? 'bad' : '' }}" data-problems-count data-house="{{ $house ?? '' }}" data-section="{{ $section ?? '' }}"><span>Проблемы</span><b>{{ $c['problems'] ?: 'нет' }}</b></div>
     </div>
     <div class="crm-scope__works">
         @foreach ($p as $w)
@@ -35,3 +35,4 @@
         @endforeach
     </div>
 </div>
+@include('concept._problems_list', ['house' => $house ?? null, 'section' => $section ?? null])

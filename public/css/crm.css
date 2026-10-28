@@ -422,3 +422,21 @@ a.close-btn { display: flex; color: inherit; }
     .page-head .breadcrumb-item { flex: 0 0 auto; white-space: nowrap; }
     .page-head .breadcrumb-item+.breadcrumb-item:before { flex: 0 0 auto; }
 }
+
+/* Поле «Проблема» и список проблем в сводках */
+.crm-problem { margin-bottom: 8px; }
+.crm-problem__box { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; color: #b33208; background: #fdeee8; }
+.crm-problem__btns { margin-left: auto; display: flex; gap: 10px; }
+.crm-problem__btns .btn-link { padding: 0; font-size: 13px; color: #8a5a00; text-decoration: underline; }
+.crm-problem__add { color: #b33208; }
+.crm-problem__form { background: #fff; border: 1px solid #f3c7b8; border-radius: 8px; padding: 10px; }
+.crm-problem__actions { display: flex; gap: 8px; margin-top: 8px; }
+.crm-problem__hint { display: block; margin-top: -2px; }
+.crm-problems { background: #fdeee8; border-radius: 12px; padding: 12px 16px; margin: 0 0 16px; display: flex; flex-direction: column; gap: 6px; }
+.crm-problems > b { color: #b33208; }
+.crm-problems a { color: #222; display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: 14px; }
+.crm-problems a span { color: #8b9298; font-size: 13px; min-width: 260px; }
+.crm-problems a:hover { color: #b33208; }
+.crm-task .crm-problem { margin: 6px 0 0; }
+.crm-task .crm-problem__box { font-size: 13px; padding: 6px 10px; }
+@media (max-width: 575.98px) { .crm-problems a span { min-width: 0; width: 100%; } }

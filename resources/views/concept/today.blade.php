@@ -12,10 +12,9 @@
                 $k = ($w['brigade'] ?? 0) . "-$code-{$f['house']}-{$f['section']}-{$f['floor']}";
                 $tasks[$k] ??= ['brigade' => $w['brigade'] ? $C::BRIGADES[$w['brigade']]['name'] : 'Без бригады',
                     'work' => $C::WORKS[$code]['name'], 'color' => $C::WORKS[$code]['color'],
-                    'where' => "Дом {$f['house']}, подъезд {$f['section']}, этаж {$f['floor']}", 'flats' => [], 'm2' => 0, 'problem' => null];
+                    'where' => "Дом {$f['house']}, подъезд {$f['section']}, этаж {$f['floor']}", 'flats' => [], 'm2' => 0, 'house' => $f['house']];
                 $tasks[$k]['flats'][] = $f['n'];
                 $tasks[$k]['m2'] += $f[$C::WORKS[$code]['basis']];
-                $tasks[$k]['problem'] ??= $f['problem'] ? "кв. {$f['n']}: {$f['problem']}" : null;
             }
         }
         $tasks = array_values($tasks);
@@ -32,10 +31,9 @@
                             <div class="crm-task__top"><b>{{ $t['brigade'] }}</b><span class="crm-tag">{{ $t['work'] }}</span></div>
                             <div class="crm-task__where">{{ $t['where'] }} · кв. {{ implode(', ', $t['flats']) }}</div>
                             <div class="crm-muted">{{ number_format($t['m2'], 0, ',', ' ') }} м²</div>
-                            @if ($t['problem'])<div class="crm-task__problem">⚠ {{ $t['problem'] }}</div>@endif
+                            @include('concept._problem', ['house' => $t['house'], 'ns' => json_encode($t['flats']), 'addLabel' => 'Проблема'])
                             <div class="crm-task__btns">
                                 <button type="button" class="btn btn-accent" @click="done[{{ $i }}] = !done[{{ $i }}]" x-text="done[{{ $i }}] ? '✓ Сделано' : 'Сделано'"></button>
-                                <button type="button" class="btn btn-light">Проблема</button>
                                 <button type="button" class="btn btn-light" title="Фото с камеры">📷</button>
                             </div>
                         </div>

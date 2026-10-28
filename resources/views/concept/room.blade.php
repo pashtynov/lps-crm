@@ -120,9 +120,9 @@
                         <span x-show="!savedAt">{{ $flat['measured'] ? '14.10.2026, замерщик Алексей К.' : 'не сделан — нет доступа' }}</span>
                         <span x-show="savedAt" x-cloak x-text="'изменён ' + savedLabel() + ' (было по проекту — «Вернуть по проекту»)'"></span>
                     </div></div>
-                    @if ($flat['problem'])
-                        <div class="col-12"><div class="sCreateObject__item"><p>Проблема</p><span class="text-danger">{{ $flat['problem'] }}</span></div></div>
-                    @endif
+                    <div class="col-12"><div class="sCreateObject__item"><p>Проблема в квартире</p>
+                        @include('concept._problem', ['house' => $house, 'ns' => $flat['n']])
+                    </div></div>
                     <div class="col-12">
                         <div class="sCreateObject__item">
                             <p>Фото с объекта</p>

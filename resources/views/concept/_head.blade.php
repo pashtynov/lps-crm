@@ -27,6 +27,7 @@
             @endforeach
         </div>
     </div>
+    @if ($tab === 'houses')@include('concept._problems_list')@endif
 
     <div class="crm-tabs-row crm-concept-tabs">
         @foreach (\App\Http\Controllers\ConceptController::TABS as $k => $label)

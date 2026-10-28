@@ -192,6 +192,21 @@ final class ConceptData
         return null;
     }
 
+    /** Проблемы по квартирам для браузера: исходные тексты и где квартира («дом:кв» => [подъезд, этаж]) — правки поверх хранит concept-problems.js */
+    public static function problemIndex(): array
+    {
+        $defaults = $flats = [];
+        foreach (self::units(null, null, false) as $f) {
+            $key = "{$f['house']}:{$f['n']}";
+            $flats[$key] = [$f['section'], $f['floor']];
+            if ($f['problem']) {
+                $defaults[$key] = $f['problem'];
+            }
+        }
+
+        return ['defaults' => $defaults, 'flats' => $flats];
+    }
+
     /** Прогресс по видам работ в м² и ₽ */
     public static function progress(?int $house = null, ?int $section = null): array
     {

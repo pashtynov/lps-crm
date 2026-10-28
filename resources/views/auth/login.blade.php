@@ -5,7 +5,7 @@
     <title>Вход — CRM Лидерпрофстрой</title>
     @include('partials.app-icons')
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=33">
+    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=34">
 </head>
 <body class="crm-login">
 <form method="post" action="{{ url('/login') }}" class="crm-card crm-login__card">

@@ -41,7 +41,7 @@
             </div>
             <p class="crm-muted mt-2">МОП — места общего пользования: холлы, лестницы, тамбур, техподполье. Их отделывают после квартир, поэтому они отстают на пару этажей — это видно по статусам.</p>
         @else
-            <div x-data="chess(@js($flats), @js($works), @js($brigadeList), @js("lps-concept-chess:$house:$section"))">
+            <div x-data="chess(@js($flats), @js($works), @js($brigadeList), @js("lps-concept-chess:$house:$section"), {{ $house }})" @lps-problems.document="rev++">
                 <div class="crm-panel crm-chess-panel">
                     <div class="crm-chess-toolbar">
                         <div class="crm-layers">
@@ -109,7 +109,7 @@
                                 <div><span>Пол</span><b x-text="open.floor_m2.toLocaleString('ru-RU') + ' м²'"></b></div>
                                 <div><span>Замер</span><b x-text="open.measured ? 'есть' : 'нет'"></b></div>
                             </div>
-                            <div class="crm-warning" x-show="open.problem" x-text="'⚠ ' + open.problem"></div>
+                            @include('concept._problem', ['house' => $house, 'ns' => 'open.n'])
                             <h4 class="crm-h4">Работы</h4>
                             <template x-for="w in works" :key="w.code">
                                 <div class="crm-drawer__work">
@@ -138,8 +138,8 @@
                 document.addEventListener('alpine:init', () => {
                     const palette = { 1: '#F4B13E', 2: '#E8913A', 3: '#467CF4', 4: '#1DBA6F', 5: '#9A52DF' };
                     const names = { todo: 'не начато', work: 'в работе', done: 'сделано', accepted: 'принято' };
-                    Alpine.data('chess', (flats, works, brigades, key) => ({
-                        flats, works, brigades, layer: 'plaster', open: null, selected: [], toast: '', snap: '',
+                    Alpine.data('chess', (flats, works, brigades, key, house) => ({
+                        flats, works, brigades, house, rev: 0, layer: 'plaster', open: null, selected: [], toast: '', snap: '',
                         // Статусы и бригады сохраняются: в концепте — в этом браузере, в рабочей версии — в базу
                         init() {
                             try {
@@ -160,13 +160,15 @@
                             if (this.flatDirty()) { if (!confirm('Изменения в квартире не сохранены. Закрыть без сохранения?')) return; this.restoreFlat(); }
                             this.open = null;
                         },
+                        // проблема — общая для всего концепта (concept-problems.js), rev — перерисовать после правки
+                        problem(f) { this.rev; return lpsProblems.get(this.house, f.n); },
                         floors() { return [...new Set(this.flats.map(f => f.floor))].sort((a, b) => b - a); },
                         flatsOn(fl) { return this.flats.filter(f => f.floor === fl); },
                         brigadeColor(id) { return palette[id] || '#c9ced2'; },
                         status(f) { return this.layer === 'measure' ? (f.measured ? 'accepted' : 'todo') : f.works[this.layer].status; },
                         cellClass(f) {
                             if (this.layer === 'brigades') return 'st-brigade';
-                            return 'st-' + this.status(f) + (f.problem && this.layer !== 'measure' ? ' has-problem' : '');
+                            return 'st-' + this.status(f) + (this.problem(f) && this.layer !== 'measure' ? ' has-problem' : '');
                         },
                         cellStyle(f) {
                             if (this.layer !== 'brigades') return '';
@@ -175,7 +177,7 @@
                         },
                         cellTitle(f) {
                             const w = this.works.find(x => x.code === this.layer);
-                            return `Кв. ${f.n}, ${f.type}` + (w ? ` — ${w.name}: ${names[f.works[w.code].status]}` : '') + (f.problem ? ` — ${f.problem}` : '');
+                            return `Кв. ${f.n}, ${f.type}` + (w ? ` — ${w.name}: ${names[f.works[w.code].status]}` : '') + (this.problem(f) ? ` — ${this.problem(f)}` : '');
                         },
                         summary() {
                             const w = this.works.find(x => x.code === this.layer);
