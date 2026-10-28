@@ -26,3 +26,13 @@
         new MutationObserver(queue).observe(document.body, { subtree: true, childList: true, characterData: true });
     });
 })();
+
+// Крошки на телефоне прокручиваются вбок — показываем конец пути (текущую страницу)
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.page-head .breadcrumb').forEach(function (b) {
+        b.scrollLeft = b.scrollWidth;
+        var edge = function () { b.classList.toggle('is-start', b.scrollLeft < 4); };
+        b.addEventListener('scroll', edge, { passive: true });
+        edge();
+    });
+});

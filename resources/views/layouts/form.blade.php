@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="{{ asset('verstka/img/favicon.ico') }}">
     @include('partials.app-icons')
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=32">
+    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=33">
     @livewireStyles
 </head>
 {{-- Окно редактирования из макета (02-edit-room, 02-edit-object-d): без бокового меню, крестик — назад --}}
@@ -19,6 +19,6 @@
     @yield('content')
 </main>
 @livewireScripts
-<script src="{{ asset('js/crm.js') }}?v=1"></script>
+<script src="{{ asset('js/crm.js') }}?v=2"></script>
 </body>
 </html>

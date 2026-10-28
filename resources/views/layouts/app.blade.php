@@ -10,7 +10,7 @@
     @include('partials.app-icons')
     <link rel="stylesheet" href="{{ asset('verstka/libs/swiper/swiper-bundle.min.css') }}">
     <link rel="stylesheet" href="{{ asset('verstka/css/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=32">
+    <link rel="stylesheet" href="{{ asset('css/crm.css') }}?v=33">
     @livewireStyles
 </head>
 <body class="{{ $bodyClass ?? 'room-page' }}">
@@ -28,6 +28,6 @@
     </div>
 </div>
 @livewireScripts
-<script src="{{ asset('js/crm.js') }}?v=1"></script>
+<script src="{{ asset('js/crm.js') }}?v=2"></script>
 </body>
 </html>

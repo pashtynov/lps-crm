@@ -412,3 +412,13 @@ a.close-btn { display: flex; color: inherit; }
    Окно появляется только прозрачностью */
 @keyframes crm-fade { from { opacity: 0; } to { opacity: 1; } }
 .createObject-page .sCreateObject { animation: crm-fade .25s ease-out both !important; transform: none !important; }
+
+/* Крошки на телефоне: одна строка с прокруткой вбок, видна текущая страница (прокрутка к концу — crm.js) */
+@media (max-width: 767.98px) {
+    .page-head .breadcrumb { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-bottom: 4px;
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 100%); mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 100%); }
+    .page-head .breadcrumb.is-start { -webkit-mask-image: none; mask-image: none; }
+    .page-head .breadcrumb::-webkit-scrollbar { display: none; }
+    .page-head .breadcrumb-item { flex: 0 0 auto; white-space: nowrap; }
+    .page-head .breadcrumb-item+.breadcrumb-item:before { flex: 0 0 auto; }
+}
