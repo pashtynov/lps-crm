@@ -10,7 +10,7 @@
                     @endforeach
                 </ol></nav>
             </div>
-            <div class="page-head__col col-md-auto order-md-2"><span class="crm-concept-badge" title="Изменения на экранах концепта не сохраняются">концепт · примерные данные</span></div>
+            <div class="page-head__col col-md-auto order-md-2"><span class="crm-concept-badge" title="Изменения сохраняются только в этом браузере — в базу CRM не пишутся">концепт · примерные данные</span></div>
             <div class="page-head__col page-head__col--title col-lg order-md-4">
                 <h1>{{ $title }} @isset($status)<span class="crm-status" style="--c: {{ $statusColor ?? '#467CF4' }}">{{ $status }}</span>@endisset</h1>
                 @isset($subtitle)<div class="crm-muted">{{ $subtitle }}</div>@endisset

@@ -41,7 +41,7 @@
             </div>
             <p class="crm-muted mt-2">МОП — места общего пользования: холлы, лестницы, тамбур, техподполье. Их отделывают после квартир, поэтому они отстают на пару этажей — это видно по статусам.</p>
         @else
-            <div x-data="chess(@js($flats), @js($works), @js($brigadeList))">
+            <div x-data="chess(@js($flats), @js($works), @js($brigadeList), @js("lps-concept-chess:$house:$section"))">
                 <div class="crm-panel crm-chess-panel">
                     <div class="crm-chess-toolbar">
                         <div class="crm-layers">
@@ -69,7 +69,7 @@
                                 <div class="crm-chess-row" :class="isSelected(floor) && 'selected'">
                                     <button type="button" class="crm-chess-floor" @click="toggleFloor(floor)" :title="'Выделить этаж ' + floor" x-text="floor"></button>
                                     <template x-for="f in flatsOn(floor)" :key="f.n">
-                                        <button type="button" class="crm-cell" :class="cellClass(f)" :style="cellStyle(f)" @click="open = f" :title="cellTitle(f)">
+                                        <button type="button" class="crm-cell" :class="cellClass(f)" :style="cellStyle(f)" @click="openFlat(f)" :title="cellTitle(f)">
                                             <span x-text="f.n"></span><small x-text="f.type"></small>
                                         </button>
                                     </template>
@@ -77,7 +77,7 @@
                             </template>
                         </div>
                     </div>
-                    <div class="crm-chess-hint">Нажмите на квартиру — откроется карточка. На номер этажа — выделится весь этаж для назначения бригады или отметки «сделано».</div>
+                    <div class="crm-chess-hint">Нажмите на квартиру — откроется карточка, изменения сохраняются кнопкой «Сохранить». На номер этажа — выделится весь этаж: назначение бригады и «сделано» сохраняются сразу.</div>
                 </div>
 
                 <div class="crm-selbar" x-cloak x-show="selected.length" x-transition>
@@ -95,12 +95,13 @@
                     <template x-if="layer === 'measure' || layer === 'brigades'"><span class="crm-muted">Выберите слой вида работ, чтобы менять статус или бригаду</span></template>
                     <button type="button" class="btn btn-light btn-sm" @click="selected = []">Снять выделение</button>
                 </div>
+                <div class="crm-toast" x-cloak x-show="toast" x-transition x-text="toast"></div>
 
-                <div class="crm-drawer-bg" x-cloak x-show="open" x-transition.opacity @click="open = null"></div>
+                <div class="crm-drawer-bg" x-cloak x-show="open" x-transition.opacity @click="closeFlat()"></div>
                 <div class="crm-drawer" x-cloak x-show="open" x-transition>
                     <template x-if="open">
                         <div>
-                            <button type="button" class="crm-drawer__close" @click="open = null">✕</button>
+                            <button type="button" class="crm-drawer__close" @click="closeFlat()">✕</button>
                             <h3 x-text="`Квартира ${open.n}`"></h3>
                             <p class="crm-muted" x-text="`Этаж ${open.floor} · планировка ${open.type}`"></p>
                             <div class="crm-drawer__facts">
@@ -123,7 +124,11 @@
                                     </select>
                                 </div>
                             </template>
-                            <a class="btn btn-accent w-100 mt-3" :href="open.url">Открыть квартиру: помещения и замеры →</a>
+                            <div class="d-flex gap-2 mt-3">
+                                <button type="button" class="btn btn-accent flex-fill" @click="saveFlat()" :disabled="!flatDirty()" x-text="flatDirty() ? 'Сохранить' : 'Сохранено'"></button>
+                                <button type="button" class="btn btn-light" x-show="flatDirty()" @click="restoreFlat()">Отменить</button>
+                            </div>
+                            <a class="btn btn-light w-100 mt-2" :href="open.url" @click="if (flatDirty() && !confirm('Изменения не сохранены. Перейти без сохранения?')) $event.preventDefault()">Открыть квартиру: помещения и замеры →</a>
                         </div>
                     </template>
                 </div>
@@ -133,8 +138,28 @@
                 document.addEventListener('alpine:init', () => {
                     const palette = { 1: '#F4B13E', 2: '#E8913A', 3: '#467CF4', 4: '#1DBA6F', 5: '#9A52DF' };
                     const names = { todo: 'не начато', work: 'в работе', done: 'сделано', accepted: 'принято' };
-                    Alpine.data('chess', (flats, works, brigades) => ({
-                        flats, works, brigades, layer: 'plaster', open: null, selected: [],
+                    Alpine.data('chess', (flats, works, brigades, key) => ({
+                        flats, works, brigades, layer: 'plaster', open: null, selected: [], toast: '', snap: '',
+                        // Статусы и бригады сохраняются: в концепте — в этом браузере, в рабочей версии — в базу
+                        init() {
+                            try {
+                                const saved = JSON.parse(localStorage.getItem(key) || '{}');
+                                this.flats.forEach(f => { if (saved[f.n]) f.works = saved[f.n]; });
+                            } catch (e) {}
+                        },
+                        persist() {
+                            const out = {}; this.flats.forEach(f => out[f.n] = f.works);
+                            try { localStorage.setItem(key, JSON.stringify(out)); return true; } catch (e) { return false; }
+                        },
+                        say(t) { this.toast = t; clearTimeout(this._t); this._t = setTimeout(() => this.toast = '', 2500); },
+                        openFlat(f) { this.open = f; this.snap = JSON.stringify(f.works); },
+                        flatDirty() { return this.open && JSON.stringify(this.open.works) !== this.snap; },
+                        restoreFlat() { if (this.open) this.open.works = JSON.parse(this.snap); },
+                        saveFlat() { if (this.persist()) { this.snap = JSON.stringify(this.open.works); this.say(`Квартира ${this.open.n} сохранена`); this.open = null; } },
+                        closeFlat() {
+                            if (this.flatDirty()) { if (!confirm('Изменения в квартире не сохранены. Закрыть без сохранения?')) return; this.restoreFlat(); }
+                            this.open = null;
+                        },
                         floors() { return [...new Set(this.flats.map(f => f.floor))].sort((a, b) => b - a); },
                         flatsOn(fl) { return this.flats.filter(f => f.floor === fl); },
                         brigadeColor(id) { return palette[id] || '#c9ced2'; },
@@ -162,8 +187,8 @@
                         isSelected(fl) { return this.selected.includes(fl); },
                         toggleFloor(fl) { this.selected = this.isSelected(fl) ? this.selected.filter(x => x !== fl) : [...this.selected, fl]; },
                         selectedFlats() { return this.flats.filter(f => this.isSelected(f.floor)); },
-                        setStatus(st) { this.selectedFlats().forEach(f => f.works[this.layer].status = st); this.selected = []; },
-                        assign(id) { if (!id) return; this.selectedFlats().forEach(f => { f.works[this.layer].brigade = +id; if (f.works[this.layer].status === 'todo') f.works[this.layer].status = 'work'; }); this.selected = []; },
+                        setStatus(st) { const n = this.selectedFlats().length; this.selectedFlats().forEach(f => f.works[this.layer].status = st); this.selected = []; this.persist(); this.say(`Сохранено: ${n} кв. — ${names[st]}`); },
+                        assign(id) { if (!id) return; const n = this.selectedFlats().length; this.selectedFlats().forEach(f => { f.works[this.layer].brigade = +id; if (f.works[this.layer].status === 'todo') f.works[this.layer].status = 'work'; }); this.selected = []; this.persist(); this.say(`Сохранено: бригада назначена на ${n} кв.`); },
                     }));
                 });
             </script>
